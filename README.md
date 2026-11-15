@@ -27,14 +27,18 @@ Antigravity (AGY) & Cursor Agent Pipeline
 │   ├── probe-before-assume/SKILL.md       # Evidence-first behavior
 │   ├── cynefin-sense-making/SKILL.md      # Domain classification
 │   └── platform-design-review/SKILL.md    # Platform review (6 tests + 7 C's)
-├── agents/                                # 7 worker subagent definitions
-│   ├── codereview.md                      # Principal code reviewer (R1)
-│   ├── pre-flight.md                      # Cynefin confidence auditor
-│   ├── execute-plan.md                    # Plan executor (production code)
-│   ├── execute-plan-tests.md              # Test writer (parallel TDD)
-│   ├── probe-runner.md                    # Safe-to-fail experiment runner
-│   ├── uiux-expert.md                     # UI/UX design orchestrator
-│   └── generate-shebangs.md               # AI Shebang generator
+├── agents/                                # 79 worker & specialist subagent definitions (AGY + Cursor)
+│   ├── codereview.md                      # Core: Principal code reviewer (R1)
+│   ├── pre-flight.md                      # Core: Cynefin confidence auditor
+│   ├── execute-plan.md                    # Core: Plan executor (production code)
+│   ├── execute-plan-tests.md              # Core: Test Specifier (Red-First ATDD)
+│   ├── probe-runner.md                    # Core: Safe-to-fail experiment runner
+│   ├── uiux-expert.md                     # Core: UI/UX design orchestrator
+│   ├── generate-shebangs.md               # Core: AI Shebang generator
+│   ├── ce-*.md                            # 52 Compound Engineering specialists (scanners, reviewers, scouts)
+│   ├── pf-*.md / uxd-assist.md            # 8 PatternFly & UXD standards/audit subagents
+│   ├── *-review.md / code-reviewer.md     # 10 compatibility, CI, memory, and code-review subagents
+│   └── explore.md / general-purpose.md    # 2 pipeline built-in aliases
 ├── references/
 │   └── architect-brief-canvas.md          # Canvas structure for bootstrap
 ├── docs/

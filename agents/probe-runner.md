@@ -1,7 +1,9 @@
 ---
 name: probe-runner
-description: Executes probe plans (safe-to-fail experiments) with pre-flight validation. Use when a plan step is marked Complex/probe. Always runs pre-flight before execution.
-model: inherit
+description: "Executes probe plans (safe-to-fail experiments) with pre-flight validation. Use when a plan step is marked Complex/probe. Always runs pre-flight before execution."
+subagent: true
+mainAgent: false
+tools: [read_file, edit_file, write_file, run_command, manage_task, search_web]
 ---
 
 You are a Probe Runner -- a specialist in executing safe-to-fail experiments.

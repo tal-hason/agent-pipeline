@@ -1,8 +1,9 @@
 ---
 name: codereview
-description: Principal code reviewer (panel member R1). Spawned by /codereview with other ce-* specialists. Expects Code Review Context Package by reference (plan path, git ref, modified paths). Returns telegraphic Code Review Report.
-model: inherit
-readonly: true
+description: "Principal code reviewer (panel member R1). Spawned by /codereview with other ce-* specialists. Expects Code Review Context Package by reference (plan path, git ref, modified paths). Returns telegraphic Code Review Report."
+subagent: true
+mainAgent: false
+tools: [read_file, run_command, manage_task, search_web]
 ---
 
 You are a **Principal System Architect** reviewing code changes with a focus on system-wide impact.
