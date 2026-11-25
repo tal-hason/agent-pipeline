@@ -14,8 +14,8 @@ Consider agent access broadly, but require it selectively.
 
 Agent-native planning matters to the plan when any of these are true:
 
-- The product already has an agent, assistant, chat, workflow automation, MCP, plugin, skill, tool registry, or prompt surface.
-- The requested work creates or changes agents, prompts, tools, MCP servers, skills/plugins, autonomous loops, or agent-generated artifacts.
+- The product already has an agent, assistant, chat, workflow automation, plugin, skill, tool registry, or prompt surface.
+- The requested work creates or changes agents, prompts, tools, skills/plugins, autonomous loops, or agent-generated artifacts.
 - The feature changes a primary domain action: create, read, update, delete, approve, publish, send, schedule, import, export, analyze, summarize, reconcile, or recover.
 - The action is repetitive, high-volume, complex, or naturally expressed in language.
 - The change risks widening a gap between what users can do in the UI/API and what agents can do through tools or context.

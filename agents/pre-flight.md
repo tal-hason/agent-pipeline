@@ -53,7 +53,7 @@ For cross-service tasks verify:
 - Modularity (files <= 100 lines)?
 - Testability (success, failure, edge case coverage)?
 - Observability (structured logging, tracing, metrics)?
-- **Path & Link Portability**: Zero `file:///` URLs? Zero leaked `/home/...` developer paths? Are internal target files strictly repo-relative (`Plans/template.md`) and cross-repo references canonical Git web URLs?
+- **Path & Link Portability**: Zero `file:///` URLs? Zero leaked `/home/...` developer paths? Are internal target files strictly repo-relative (`docs/plans/template.md`) and cross-repo references canonical Git web URLs?
 
 ## Step 4: Platform Abstraction & Economics (if applicable)
 

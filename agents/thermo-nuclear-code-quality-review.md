@@ -1,6 +1,6 @@
 ---
 name: thermo-nuclear-code-quality-review
-description: "Thermo-nuclear code quality audit (maintainability, structure, 1k-line rule, spaghetti, code-judo). Invoked via Task after a parent gathers diff and file contents. Loads the rubric from the `thermo-nuclear-code-quality-review` skill in the cursor-team-kit plugin."
+description: "Thermo-nuclear code quality audit (maintainability, structure, 1k-line rule, spaghetti, code-judo). Invoked via Task after a parent gathers diff and file contents."
 subagent: true
 mainAgent: false
 tools: [read_file, run_command, manage_task, search_web]
@@ -12,8 +12,11 @@ You are a **Task subagent**. The parent agent already collected git output and c
 
 ## Rubric
 
-1. Load the `thermo-nuclear-code-quality-review` skill (shipped in the cursor-team-kit plugin) and treat its `SKILL.md` as the **complete** rubric — tone, approval bar, output ordering, code-judo / 1k-line / spaghetti rules.
-2. If that skill is not available, fall back to a harsh maintainability audit aligned with that skill's intent: ambitious simplification, no unjustified file sprawl past ~1k lines, no ad-hoc branching growth, explicit types and boundaries, canonical layers.
+Apply a strict, high-conviction maintainability audit focused on structural quality:
+1. **Ambitious simplification (code-judo):** Delete unnecessary complexity and collapse duplicated paths into clean abstractions rather than rearranging bloat.
+2. **File modularity (~1k-line ceiling):** Reject unjustified file sprawl past ~1,000 lines; split by cohesive responsibility and boundary.
+3. **Zero spaghetti & ad-hoc branching:** Flag growing `if/elif/switch` chains, leaky abstractions, and tangled control flow; enforce explicit types and strict canonical layer boundaries.
+4. **High approval bar:** Output findings in descending severity order, skipping cosmetic nits when structural or architectural issues exist.
 
 ## Work
 

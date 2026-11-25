@@ -51,7 +51,7 @@ Scan in order. First that is NOT `completed` or `cancelled`:
 
 #### If `blocked`
 
-1. Find linked probe plan (`.cursor/plans/probe_{step_id}.plan.md`).
+1. Find linked probe plan (`.agents/plans/probe_{step_id}.plan.md` or `.cursor/plans/probe_{step_id}.plan.md`).
 2. If all probe todos `completed`: unblock parent, continue.
 3. If probe incomplete: report status, STOP.
 
@@ -99,12 +99,14 @@ Scan in order. First that is NOT `completed` or `cancelled`:
 
 ## Workflow
 
-This agent sits at position [3] in the pipeline:
+This agent sits in the execution stage of the 9-stage pipeline:
 
 1. **Architect** (`/architect-bootstrap`) -> scopes
 2. **Plan** (`/create-plan`) -> evidence-backed plan
-3. **Pre-Flight** (`/pre-flight`) -> main agent stress-tests (gate >= 90%)
-4. **Execute** (this) -> implements
-5. **Code Review** (`/codereview`) -> main agent reviews
+3. **Pre-Flight** (`/pre-flight` ⇄ `/update-plan` / `/converge-plan`) -> stress-tests & refines (gate >= 90%)
+4. **Execute** (this) -> implements production code against sealed tests
+5. **Code Review** (`/codereview`) -> multi-reviewer panel
+6. **Ship** (`/open-mr`) -> PR/MR creation, CI & review monitor
+7. **Close** (`/eop`) -> session digest & learnings
 
 After execution, prompt the user: "Ready for code review. Run `/codereview`."

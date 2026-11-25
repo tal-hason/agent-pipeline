@@ -65,13 +65,12 @@ Before going online, check if curated knowledge already exists in skills:
 Only after checking skills AND verifying API availability, gather additional information:
 
 1. **Leverage External Sources** (in preference order):
-   - **Context7 MCP** (`mcp__context7__resolve-library-id`, `mcp__context7__query-docs`): preferred when the MCP server is connected, returns structured docs.
-   - **`ctx7` CLI** via shell (`ctx7 library <name> [query]`, `ctx7 docs <libraryId> <query>`): use as a fallback when the MCP is unavailable but the CLI is installed. Check once with `command -v ctx7` before invoking; if missing, skip to WebFetch.
-   - **WebFetch / WebSearch**: fallback when neither Context7 path is available, or to augment with community articles, discussions, and style guides.
+   - **`ctx7` CLI** via shell (`ctx7 library <name> [query]`, `ctx7 docs <libraryId> <query>`) or connected documentation lookup tools: preferred when available, returns structured official docs. Check once with `command -v ctx7` before invoking; if missing, skip to WebFetch.
+   - **WebFetch / WebSearch**: fallback when `ctx7` is unavailable, or to augment with community articles, discussions, and style guides.
    - Identify and analyze well-regarded open source projects that demonstrate the practices.
 
 2. **Online Research Methodology**:
-   - Start with official documentation via Context7 (MCP or CLI) for the specific technology.
+   - Start with official documentation via `ctx7` CLI or documentation lookup tools for the specific technology.
    - Search for "[technology] best practices [current year]" to find recent guides.
    - Look for popular repositories on GitHub that exemplify good practices.
    - Check for industry-standard style guides or conventions.

@@ -1,50 +1,54 @@
-# Cursor Agent Pipeline
+# Agent Pipeline
 
-A complete agent pipeline for [Cursor IDE](https://cursor.com) that turns a vague idea into reviewed, committed code through six structured stages.
+A complete, modular agent pipeline for **Cursor**, **Antigravity (AGY) / Gemini**, and **Claude Code** that turns a vague idea into reviewed, shipped, and documented code through nine structured stages.
 
 ```
-/architect-bootstrap  →  /create-plan  →  /pre-flight  →  /execute-plan  →  /codereview  →  /eop
-     (WHERE + WHAT)        (HOW)           (audit)         (build)          (review)       (close)
+/architect-bootstrap → /create-plan → /pre-flight ⇄ /update-plan → /execute-plan → /codereview → /open-mr → /eop
+     (WHERE+WHAT)         (HOW)            ▲             │               (build)        (review)     (ship)    (close)
+                                           └─ /converge-plan ─┘
 ```
 
 ## What's in this repo
 
-This is a `.cursor` configuration package. Copy its contents into your `~/.cursor/` directory (or a project-level `.cursor/` folder) to get the full pipeline.
+Copy these files into your user-level agent config (`~/.cursor/`, `~/.gemini/config/`, or `~/.claude/`) or into a project-level `.cursor/` / `.agents/` directory.
 
 ```
-Antigravity (AGY) & Cursor Agent Pipeline
-├── AGENTS.md                              # Pipeline memory (continual learning)
-├── skills/                                # 12 modular skills (progressive disclosure)
-│   ├── agent-pipeline/SKILL.md            # Canonical pipeline orchestrator
-│   ├── architect-bootstrap/SKILL.md       # Step 1: workspace scan + canvas brief
-│   ├── create-plan/SKILL.md               # Step 2: evidence-backed plan
-│   ├── pre-flight/SKILL.md                # Step 3: confidence audit (iterative)
-│   ├── execute-plan/SKILL.md              # Step 4: implement plan (parallel TDD)
-│   ├── codereview/SKILL.md                # Step 5: multi-reviewer panel
-│   ├── eop/SKILL.md                       # Step 6: session digest + learnings
+Agent Pipeline Package
+├── AGENTS.md                              # Pipeline contract & cross-session learnings
+├── skills/                                # 15 modular skills (progressive disclosure)
+│   ├── agent-pipeline/SKILL.md            # Canonical 9-stage pipeline orchestrator
+│   ├── architect-bootstrap/SKILL.md       # Stage 1: workspace scan + canvas brief
+│   ├── create-plan/SKILL.md               # Stage 2: evidence-backed plan + 4-layer ATDD spec
+│   ├── pre-flight/SKILL.md                # Stage 3: confidence audit (iterative, ≥90% gate)
+│   ├── update-plan/SKILL.md               # Stage 4: surgical plan amendment + Coherence Gate
+│   ├── converge-plan/SKILL.md             # Stage 5: automated pre-flight ⇄ update-plan loop
+│   ├── execute-plan/SKILL.md              # Stage 6: Red-First ATDD implementation
+│   ├── codereview/SKILL.md                # Stage 7: multi-reviewer panel
+│   ├── open-mr/SKILL.md                   # Stage 8: PR/MR creation + CI & review monitor
+│   ├── eop/SKILL.md                       # Stage 9: session digest + AGENTS.md learnings
 │   ├── uiux-expert/SKILL.md               # Standalone: UI/UX design orchestrator
-│   ├── generate-shebangs/SKILL.md         # Standalone: AI Shebang header generator
-│   ├── probe-before-assume/SKILL.md       # Evidence-first behavior
-│   ├── cynefin-sense-making/SKILL.md      # Domain classification
-│   └── platform-design-review/SKILL.md    # Platform review (6 tests + 7 C's)
-├── agents/                                # 79 worker & specialist subagent definitions (AGY + Cursor)
+│   ├── generate-shebangs/SKILL.md         # Standalone: @ai-rules header generator
+│   ├── probe-before-assume/SKILL.md       # Foundational: evidence-first behavior
+│   ├── cynefin-sense-making/SKILL.md      # Foundational: Cynefin domain classification
+│   └── platform-design-review/SKILL.md    # Foundational: platform review (6 tests + 7 C's)
+├── agents/                                # 69 worker & specialist subagent definitions
 │   ├── codereview.md                      # Core: Principal code reviewer (R1)
 │   ├── pre-flight.md                      # Core: Cynefin confidence auditor
 │   ├── execute-plan.md                    # Core: Plan executor (production code)
 │   ├── execute-plan-tests.md              # Core: Test Specifier (Red-First ATDD)
 │   ├── probe-runner.md                    # Core: Safe-to-fail experiment runner
 │   ├── uiux-expert.md                     # Core: UI/UX design orchestrator
-│   ├── generate-shebangs.md               # Core: AI Shebang generator
-│   ├── ce-*.md                            # 52 Compound Engineering specialists (scanners, reviewers, scouts)
-│   ├── pf-*.md / uxd-assist.md            # 8 PatternFly & UXD standards/audit subagents
-│   ├── *-review.md / code-reviewer.md     # 10 compatibility, CI, memory, and code-review subagents
+│   ├── generate-shebangs.md               # Core: @ai-rules header generator
+│   ├── ce-*.md                            # 51 Compound Engineering specialists & scouts
+│   ├── *-review.md / ci-watcher.md / ...  # 9 compatibility, CI, learning, & code-review agents
 │   └── explore.md / general-purpose.md    # 2 pipeline built-in aliases
 ├── references/
-│   └── architect-brief-canvas.md          # Canvas structure for bootstrap
+│   └── architect-brief-canvas.md          # Canvas structure for /architect-bootstrap
 ├── docs/
-│   └── pipeline-howto.md                  # Team onboarding guide
-├── rules/                                 # 12 always-on rules (.mdc / .md)
-│   ├── persona.md                         # Systems Architect persona
+│   └── pipeline-howto.md                  # Team onboarding & usage guide
+├── rules/                                 # 13 rules (.mdc)
+│   ├── persona.mdc                        # Systems Architect persona
+│   ├── orchestrator-mandate.mdc           # Main-agent delegation of code mutations
 │   ├── cynefin.mdc                        # Cynefin sense-making framework
 │   ├── kiss.mdc                           # KISS problem-solving principle
 │   ├── ai-shebang.mdc                     # @ai-rules header enforcement
@@ -58,37 +62,48 @@ Antigravity (AGY) & Cursor Agent Pipeline
 │   └── plan-probes.mdc                    # Complex step probe templates
 ├── hooks.json                             # Session hooks configuration
 └── hooks/
-    └── codereview-reminder.sh             # Remind to run /codereview
+    └── codereview-reminder.sh             # Remind to run /codereview when files changed
 ```
 
 ## Installation
 
-### Full pipeline (recommended)
-
-Copy the entire package into your Cursor user config:
+Clone the repository and copy the package into your preferred agent environment:
 
 ```bash
-cp -r cursor-public/* ~/.cursor/
+git clone https://github.com/tal-hason/cursor-stuff.git
+```
+
+### Cursor (user-level)
+
+```bash
+cp -r cursor-stuff/{AGENTS.md,agents,docs,hooks,hooks.json,references,rules,skills} ~/.cursor/
+```
+
+### Antigravity / Gemini (user-level)
+
+```bash
+cp -r cursor-stuff/{AGENTS.md,agents,docs,references,rules,skills} ~/.gemini/config/
 ```
 
 ### Project-level
 
-Copy into a project's `.cursor/` folder for repo-scoped pipeline:
+Copy into a repository's `.cursor/` or `.agents/` folder for repo-scoped use:
 
 ```bash
-cp -r cursor-public/* /path/to/project/.cursor/
+mkdir -p /path/to/project/.cursor
+cp -r cursor-stuff/{AGENTS.md,agents,docs,hooks,hooks.json,references,rules,skills} /path/to/project/.cursor/
 ```
 
 ### Cherry-pick
 
-Copy individual files. At minimum, the pipeline needs:
-- `skills/agent-pipeline/SKILL.md` + the 6 pipeline skills in `skills/`
+At minimum, the pipeline needs:
+- `skills/agent-pipeline/SKILL.md` + the 9 workflow skills in `skills/`
 - `agents/` (worker definitions)
-- `rules/cynefin.mdc` + `rules/persona.md` (core behavior)
+- `rules/cynefin.mdc`, `rules/persona.mdc`, and `rules/orchestrator-mandate.mdc`
 
 ## How the pipeline works
 
-See [`docs/pipeline-howto.md`](docs/pipeline-howto.md) for the full team guide.
+See [`docs/pipeline-howto.md`](docs/pipeline-howto.md) for the full guide.
 
 ### Quick start
 
@@ -98,14 +113,16 @@ See [`docs/pipeline-howto.md`](docs/pipeline-howto.md) for the full team guide.
 Add a health check endpoint that returns pod readiness and database connectivity
 ```
 
-The agent scans the workspace, builds a canvas with situational awareness, then prompts you to continue:
+The agent scans the workspace, builds a canvas with situational awareness, then guides you through the pipeline:
 
 ```
-/create-plan        # Build atomic implementation plan
-/pre-flight         # Audit plan confidence (iterative — run again anytime)
-/execute-plan       # Implement step by step
+/create-plan        # Build atomic implementation plan + 4-layer ATDD test spec
+/pre-flight         # Audit plan confidence (soft gate ≥ 90%)
+/update-plan        # Bake Path to Green into the plan (or /converge-plan to auto-loop)
+/execute-plan       # Implement via Red-First ATDD closed loop
 /codereview         # Multi-reviewer panel
-/eop                # Capture learnings, compress context
+/open-mr            # Push branch, open PR/MR, monitor CI & reviews, merge when safe
+/eop                # Capture learnings into AGENTS.md, write session digest
 ```
 
 ### Recommended: Two-session workflow
@@ -113,7 +130,7 @@ The agent scans the workspace, builds a canvas with situational awareness, then 
 1. **Session 1 (explore):** Run `/architect-bootstrap` to scan and understand the workspace. Brainstorm with the agent. Ask it to write a focused feature prompt.
 2. **Session 2 (execute):** Open a fresh chat. Paste the feature prompt into `/architect-bootstrap`. Run the full pipeline with clean context.
 
-Memory bridges the gap — Session 1's canvas and brainstorm docs are stored via `memory_store` and recalled automatically by Session 2's `/architect-bootstrap`.
+Artifacts on disk bridge the gap — Session 1's canvas, `docs/brainstorms/` requirements, `.agents/plans/` artifacts, and `AGENTS.md` are read automatically by Session 2's `/architect-bootstrap`.
 
 ## Design principles
 
@@ -125,22 +142,8 @@ This pipeline is built on:
 - **[Continuous delivery](https://continuousdelivery.com/)** — small verifiable batches, build quality in
 - **[Platform Strategy](https://architectelevator.com/book/platformstrategy/)** (Gregor Hohpe) — 7 C's, Double Pyramid, abstractions not illusions
 - **Probe-before-assume** — never act on assumptions when evidence is available
-- **Parallel TDD** — independent test writer runs alongside the code executor; divergences signal plan ambiguity
-
-## Excluded from this package
-
-This is a sanitized extract. Internal/company-specific items not included:
-
-- Jira workflow rules (instance URLs, custom field IDs, team accounts)
-- GitLab internal rules (host aliases, repo group mappings)
-- OCP cluster login aliases
-- Bot MR description protocols
-- Company-specific skills (Jira integration, build audits, memory MCP)
-- MCP server credentials (`mcp.json`)
-- Memory MCP hooks (auto-store, warm-up, sync)
-- Session hook for git config sync
-- `plans/` directory (generated artifacts)
-- `skills-cursor/` (Cursor-managed, auto-synced by the IDE)
+- **Red-First ATDD** — independent test specifier writes failing 4-layer acceptance tests first, locks the test contract, and a separate code executor turns Red into Green
+- **Orchestrator mandate** — main agent coordinates and verifies; worker subagents execute all code mutations
 
 ## License
 

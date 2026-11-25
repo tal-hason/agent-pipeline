@@ -1,7 +1,7 @@
 ---
 name: pre-flight
 description: >-
-  Stage 3 of the Antigravity agent pipeline. Audits an implementation plan (.plan.md)
+  Stage 3 of the agent pipeline. Audits an implementation plan (.plan.md)
   for confidence, boundary violations, integration risks, and Cynefin alignment before touching
   production code. Soft gate ≥ 90%. Use iteratively to validate and refine plans prior to execution.
 ---
@@ -22,53 +22,55 @@ Spawn **`pre-flight` auditors** in Step 3 (`readonly: true`). You merge their ou
 
 | Step | Who | Action | Gate |
 | :--- | :--- | :--- | :--- |
-| 1 | Main agent | **`memory_search` NOW** | Hits shown |
+| 1 | Main agent | **Context recall** (`AGENTS.md`, plan, prior pre-flight reports) | Prior trend loaded |
 | 2 | Main agent | Build **Pre-Flight Context Package** | Full plan loaded — not an excerpt |
-| 3 | Auditors (parallel) | Dispatch `pre-flight` subagents | All auditors returned |
+| 3 | Auditors (parallel) | Dispatch `pre-flight` subagents (+ optional security lens) | All auditors returned |
 | 4 | Main agent | Pessimistic merge + correlation | Report draft ready |
 | 5 | Main agent | Write `*-Pre-Flight-Review_*.md` | File on disk |
-| 6 | Main agent | Present dashboard + **`memory_store` NOW** | User sees confidence + path to green |
+| 6 | Main agent | Present dashboard | User sees confidence + path to green |
 
-**Soft gate for `/execute-plan`:** ≥ 90% and not Stop → ready; otherwise Path to Green or user override.
+**Soft gate for `/execute-plan`:** ≥ 90% and not Stop → ready; otherwise **`/update-plan`** or **`/converge-plan`**, then re-audit, or user override (see [Agent Pipeline Contract](../agent-pipeline/SKILL.md)).
 
-**Next:** `/execute-plan` → `/codereview` (or edit plan + run `/pre-flight` again)
+**Next:** Ready → `/execute-plan` → `/codereview`. Else → `/update-plan` / `/converge-plan`.
 
 ---
 
-## Step 1: Memory Recall (mandatory)
+## Step 1: Context Recall
 
-Call `memory_search` **before any other work**:
-
-`query`: pre-flight, plan name/slug, same feature/workspace · `limit: 5` · present hits > 0.6
+Read `AGENTS.md` (workspace and user-level if present), the target `.plan.md`, and all prior `*-Pre-Flight-Review_*.md` reports for this plan slug. Note any Revision History / Amendment Ledger deltas if `/update-plan` ran since the last audit.
 
 ---
 
 ## Step 2: Pre-Flight Context Package (by Reference)
 
-**Main agent only.** Build this package — auditors receive the **package by reference** with exact file paths, avoiding prompt token bloat from duplicating large plan files:
+**Main agent only.** Read the plan file from disk. Build this package — auditors receive the **package by reference** with exact file paths, avoiding prompt token bloat from duplicating large plan files:
 
 ```markdown
 ## Pre-Flight Context Package: {plan-slug}
 
 ### 1. Plan Identity
-- **Path:** absolute path to `.plan.md` (read directly via `view_file`)
+- **Path:** absolute path to `.plan.md` (read directly via file tools)
 - **Name / overview:** from YAML frontmatter
 - **Workspace:** current workspace root
 
 ### 2. Plan Structure Summary
 - Numbered atomic steps with Cynefin tags from the plan
 - Complex / probe-required steps highlighted
-- Files referenced in the plan (absolute paths)
+- Files referenced in the plan (repo-relative paths)
 
 ### 3. Prior Art & Iteration History
-- Relevant `memory_search` hits from Step 1
+- Relevant `AGENTS.md` constraints from Step 1
 - Prior `*-Pre-Flight-Review_*.md` for this plan slug (summarize confidence trend)
+- If plan changed via `/update-plan`: note Revision History / Amendment Ledger summary
 
 ### 4. Audit Mission
-Stress-test the plan above. Classify each step (Cynefin), score confidence, find gaps. Do not execute code. Read the plan from its path directly.
+Stress-test the plan above. Classify each step (Cynefin), score confidence, find gaps.
+Audit path & link hygiene: verify zero `file:///` URLs and zero leaked `/home/<user>/...`
+developer paths; internal targets must be repo-relative and external links canonical HTTPS Git URLs.
+Do not execute code. Read the plan from its path directly.
 ```
 
-**Gate:** Package complete before Step 3. Never dispatch auditors with only the user’s last message.
+**Gate:** Package complete before Step 3. Never dispatch auditors with only the user's last message.
 
 ---
 
@@ -76,22 +78,24 @@ Stress-test the plan above. Classify each step (Cynefin), score confidence, find
 
 **WAIT** for all auditors before Step 4.
 
-Dispatch **3** `pre-flight` subagents in parallel. `readonly: true`.
+Dispatch **3** `pre-flight` subagents in **one message** using distinct thinking-tier models where supported. `readonly: true`.
 
 | Auditor | Model | Lens |
 | :--- | :--- | :--- |
-| **A** | `inherit` / `pro` | Cynefin + architecture depth, integration patterns |
-| **B** | `flash` | Gap analysis, missing context, plan completeness |
-| **C** | `inherit` / `pro` | Contracts, platform abstractions, edge cases |
+| **A** | Thinking-tier (distinct model) | Cynefin + architecture depth, integration patterns |
+| **B** | Thinking-tier (distinct model) | Gap analysis, missing context, plan completeness, path & link hygiene |
+| **C** | Thinking-tier (distinct model) | Contracts, platform abstractions, edge cases |
 
-**Optional security lane:** When the plan touches auth/authz, secrets, public endpoints, PII, or trust boundaries — dispatch a security lens reviewer in parallel.
+**Optional security lane (4th auditor):** When the plan touches auth/authz, secrets, public endpoints, PII, or trust boundaries — dispatch **`ce-security-lens-reviewer`** in the **same message** (`readonly: true`). Mission: plan-level threat model gaps (not code audit). Findings merge into Gap Analysis and Path to Green.
 
-### Each Task prompt MUST include:
+**Model policy:** Thinking-tier only. No `*-fast` models.
+
+### Each prompt MUST include
 
 1. **Pre-Flight Context Package by Reference** (pass plan path)
 2. **Mission:** execute the `pre-flight` agent procedure; return structured Pre-Flight Dashboard only
 3. **Communication Contract:** strict telegraphic style (caveman), zero greetings/filler/intros, start directly with `### 1. Confidence Dashboard`
-4. **Output contract:** structured audit format
+4. **Output contract:** per `agents/pre-flight.md` output format
 
 ---
 
@@ -106,29 +110,71 @@ Dispatch **3** `pre-flight` subagents in parallel. `readonly: true`.
 | Contradictions | Flag for user; do not silently resolve |
 | Path to Green | Merge, dedupe, blockers first |
 
-**Cross-issue correlation:** Collapse findings that share one root cause before finalizing. Produce **Auditor agreement matrix**.
+**Cross-issue correlation:** Collapse findings that share one root cause before finalizing. Produce **Auditor agreement matrix** (task × A/B/C × confidence).
 
 ---
 
 ## Step 5: Write Report
 
-Path: `.agents/plans/{plan-slug}-Pre-Flight-Review_YYYY-MM-DD_HHMM.md`
+Path: `.agents/plans/{plan-slug}-Pre-Flight-Review_YYYY-MM-DD_HHMM.md` (or `.cursor/plans/{plan-slug}-Pre-Flight-Review_YYYY-MM-DD_HHMM.md`).
 
 Required sections:
-1. Confidence Dashboard (overall %, Ready/Caution/Stop, top blockers)
+1. Confidence Dashboard (overall %, Ready/Caution/Stop, auditors, top blockers)
 2. Task-by-Task Analysis (min confidence, agreement column)
 3. Integration Risk Matrix
 4. Platform Abstraction Audit (if applicable)
-5. Gap Analysis (< 95% tasks — ambiguity, missing context, risk)
-6. Security Threat Model (if security lane ran)
+5. Gap Analysis (< 95% tasks — ambiguity, missing context, risk, source auditor)
+6. Security Threat Model (if security lane ran — auth assumptions, data exposure, missing controls)
 7. Auditor Disagreements (if any)
 8. Path to Green (blockers + suggestions)
 
 ---
 
-## Step 6: Present and Index
+## Step 6: Present Dashboard
 
 1. **Paste the full Pre-Flight Dashboard in this conversation.**
-2. Call `memory_store` **NOW**: `title` = report filename, `content` = full report body, `doc_type: preflight`.
-3. State outcome:
-   - *"Confidence {N}%. Run #{K} for this plan. {Ready → `/execute-plan` | Caution/Stop → Path to Green below; update plan and `/pre-flight` again anytime}."*
+2. State outcome (no pushback on re-runs):
+   - *"Confidence {N}%. Run #{K} for this plan. {Ready → `/execute-plan` | Caution/Stop → Path to Green below; run `/update-plan` or `/converge-plan`}."*
+
+---
+
+## Iteration loop
+
+```
+/create-plan → /pre-flight → /update-plan → /pre-flight → … → /execute-plan
+                    ▲                │
+                    └────────────────┘
+
+Or: /create-plan → /converge-plan → /execute-plan
+```
+
+- Each `/pre-flight` run is independent — never say "you already ran pre-flight."
+- Compare against prior reports; highlight **delta** in confidence and resolved blockers.
+- Prefer **`/update-plan`** (single amend) or **`/converge-plan`** (auto loop) over ad-hoc plan edits.
+- **Stop** status is advisory — user may `/update-plan` / `/converge-plan` immediately.
+
+---
+
+## Anti-Patterns
+
+- Overlooking leaked developer home paths (`/home/...`) or `file:///` URLs in the plan during audit
+- Pushback when user runs `/pre-flight` again
+- Auditing from plan excerpt while full file exists on disk
+- Averaging confidence scores
+- Discarding a gap because only one auditor found it
+- Deliverable only in subagent thread
+- Telling the user to "edit the plan" without recommending `/update-plan` or `/converge-plan`
+
+## Pipeline position
+
+| # | Skill | Actor |
+| :--- | :--- | :--- |
+| 1 | `/architect-bootstrap` | main agent (+ scan panel) |
+| 2 | `/create-plan` | main agent (+ evidence explorers) |
+| 3 | `/pre-flight` | **main agent** (+ `pre-flight` auditors, iterative) |
+| 4 | `/update-plan` | main agent (+ conditional explorers) |
+| 5 | `/converge-plan` | main agent (orchestrates pre-flight ⇄ update-plan) |
+| 6 | `/execute-plan` | main agent (+ test specifier + executor) |
+| 7 | `/codereview` | main agent (+ `codereview` reviewers) |
+| 8 | `/open-mr` | main agent (+ CI & review monitor) |
+| 9 | `/eop` | main agent (terminal) |

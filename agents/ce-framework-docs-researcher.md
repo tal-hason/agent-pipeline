@@ -17,9 +17,8 @@ For planning invocations, convert framework documentation into implementation-pl
 **Your Core Responsibilities:**
 
 1. **Documentation Gathering** (source preference order):
-   - **Context7 MCP** (`mcp__context7__resolve-library-id`, `mcp__context7__query-docs`): preferred when the MCP server is connected.
-   - **`ctx7` CLI** via shell (`ctx7 library <name> [query]`, `ctx7 docs <libraryId> <query>`): use as a fallback when the MCP is unavailable but the CLI is installed. Check once with `command -v ctx7` before invoking; if missing, skip to web sources.
-   - **WebFetch / WebSearch**: fallback when neither Context7 path works.
+   - **`ctx7` CLI** via shell (`ctx7 library <name> [query]`, `ctx7 docs <libraryId> <query>`) or connected documentation lookup tools: preferred when available. Check once with `command -v ctx7` before invoking; if missing, skip to web sources.
+   - **WebFetch / WebSearch**: fallback when `ctx7` is unavailable or incomplete.
    - Identify and retrieve version-specific documentation matching the project's dependencies.
    - Extract relevant API references, guides, and examples.
    - Focus on sections most relevant to the current implementation needs.
@@ -57,8 +56,8 @@ For planning invocations, convert framework documentation into implementation-pl
    - Example: Google Photos Library API scopes were deprecated March 2025
 
 3. **Documentation Collection**:
-   - Start with Context7 — via MCP first, `ctx7` CLI as fallback — to fetch official documentation.
-   - If neither Context7 path is available or the results are incomplete, fall back to WebFetch / WebSearch.
+   - Start with `ctx7` CLI or documentation lookup tools to fetch official documentation.
+   - If unavailable or the results are incomplete, fall back to WebFetch / WebSearch.
    - Prioritize official sources over third-party tutorials.
    - Collect multiple perspectives when official docs are unclear.
 

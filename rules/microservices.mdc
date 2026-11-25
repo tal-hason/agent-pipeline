@@ -9,11 +9,11 @@ This rule extends the core "Systems Architect" persona to the distributed landsc
 
 ## 1. Core Distributed Principles
 
-* **Independent Deployability**: Every service must have its own CI/CD lifecycle (Tekton/ArgoCD). A change in one service should NEVER require a synchronized deployment of another.
+* **Independent Deployability**: Every service must have its own CI/CD lifecycle (automated CI/CD and GitOps). A change in one service should NEVER require a synchronized deployment of another.
 * **Decentralization**:
   * **Database per Service**: Data is private to the service. Access is only via the service's **Driving Ports** (APIs).
   * **Decentralized Governance**: Use the right tool for the job (Node.js for I/O, Python for ML, Go for performance) while maintaining consistent **Ports**.
-* **The Global Setpoint**: The system's desired state is defined by the orchestration layer (ArgoCD/Kubernetes). If a service fails, the orchestration (Feedback Loop) must restart or scale it to meet the Setpoint.
+* **The Global Setpoint**: The system's desired state is defined by the orchestration layer (GitOps/Kubernetes). If a service fails, the orchestration (Feedback Loop) must restart or scale it to meet the Setpoint.
 
 ## 2. Technical Mapping (Hexagonal + Microservices)
 

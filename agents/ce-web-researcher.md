@@ -31,7 +31,7 @@ Web sources carry meaning in their structure, not just their text. Apply these p
 
 This agent depends on dedicated web-search and web-fetch tools in the current environment. Verify availability before doing any work:
 
-1. Identify the web-search and web-fetch tools reachable from this agent. The shape does not matter — built-in tools, MCP-provided tools, CLIs, or any other dedicated mechanism the caller has wired up all qualify. What matters is that each is a purpose-built web tool, not a generic network command.
+1. Identify the web-search and web-fetch tools reachable from this agent. The shape does not matter — built-in tools, configured search tools, CLIs, or any other dedicated mechanism the caller has wired up all qualify. What matters is that each is a purpose-built web tool, not a generic network command.
 
    Both capabilities are required: a web-search-capable tool *and* a web-fetch-capable tool must be reachable (a single tool that covers both responsibilities counts). If both are reachable, proceed to Step 2 using whichever tools are present. If either is missing, report that web research is unavailable in this environment and stop.
 

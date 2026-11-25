@@ -42,7 +42,7 @@ Read `skills-cursor/canvas/SKILL.md` before authoring.
 | **Architecture Style** | Monolith / Microservices / Serverless / Hybrid |
 | **Key Boundaries** | Ports & Adapters, API surfaces, event buses |
 | **State Management** | Databases, caches, message queues |
-| **CI/CD** | Tekton, GitHub Actions, GitLab CI, ArgoCD, etc. |
+| **CI/CD** | GitHub Actions, GitLab CI, GitOps, etc. |
 | **Messaging / Events** | Bus, broker, async patterns |
 | **Gaps / Risks** | Tests, observability, coupling, tech debt |
 
@@ -52,11 +52,9 @@ Read `skills-cursor/canvas/SKILL.md` before authoring.
 
 6. **Platform Economics** (when platform repo) — Innovation, Cimarron, Railway/Guardrail verdicts.
 
-7. **Jira discovery** (when Step 5 ran) — overlapping epics/tasks summary.
+7. **Pipeline footer** — `bootstrap → create-plan → pre-flight ⇄ update-plan → execute-plan → codereview → open-mr → eop`; note brainstorm doc handoff if any.
 
-8. **Pipeline footer** — `bootstrap → create-plan → pre-flight → execute-plan → codereview`; note brainstorm doc handoff if any.
-
-9. **Footer** — `Text` `tone="secondary"` `size="small"`: files directly validated.
+8. **Footer** — `Text` `tone="secondary"` `size="small"`: files directly validated.
 
 ### Pre-delivery self-check
 
