@@ -99,14 +99,15 @@ Scan in order. First that is NOT `completed` or `cancelled`:
 
 ## Workflow
 
-This agent sits in the execution stage of the 9-stage pipeline:
+This agent sits in the execution stage of the 10-stage pipeline:
 
 1. **Architect** (`/architect-bootstrap`) -> scopes
 2. **Plan** (`/create-plan`) -> evidence-backed plan
-3. **Pre-Flight** (`/pre-flight` ⇄ `/update-plan` / `/converge-plan`) -> stress-tests & refines (gate >= 90%)
-4. **Execute** (this) -> implements production code against sealed tests
-5. **Code Review** (`/codereview`) -> multi-reviewer panel
-6. **Ship** (`/open-mr`) -> PR/MR creation, CI & review monitor
-7. **Close** (`/eop`) -> session digest & learnings
+3. **Grill** (`/grill-me`) -> resolves decision-tree branches interactively
+4. **Pre-Flight** (`/pre-flight` ⇄ `/update-plan` / `/converge-plan`) -> stress-tests & refines (gate >= 90%)
+5. **Execute** (this) -> implements production code against sealed tests
+6. **Code Review** (`/codereview`) -> multi-reviewer panel
+7. **Ship** (`/open-mr`) -> PR/MR creation, CI & review monitor
+8. **Close** (`/eop`) -> session digest & learnings
 
 After execution, prompt the user: "Ready for code review. Run `/codereview`."

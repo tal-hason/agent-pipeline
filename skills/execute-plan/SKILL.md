@@ -1,7 +1,7 @@
 ---
 name: execute-plan
 description: >-
-  Stage 6 of the agent pipeline. Executes an approved implementation plan
+  Stage 7 of the agent pipeline. Executes an approved implementation plan
   using Red-First ATDD (Test Specifier Red harness -> Contract Lock -> Code Executor Green SUT),
   running safe-to-fail probes for Complex steps, and reconciling test results.
 ---
@@ -179,10 +179,11 @@ Ensure `.plan.md` frontmatter reflects actual todo statuses from execution.
 | :--- | :--- | :--- |
 | 1 | `/architect-bootstrap` | main agent (+ scan panel) |
 | 2 | `/create-plan` | main agent (+ evidence explorers) |
-| 3 | `/pre-flight` | main agent (+ `pre-flight` auditors, iterative) |
-| 4 | `/update-plan` | main agent (+ conditional explorers) |
-| 5 | `/converge-plan` | main agent (orchestrates pre-flight ⇄ update-plan) |
-| 6 | `/execute-plan` | **main agent** (+ `execute-plan-tests` + `execute-plan`) |
-| 7 | `/codereview` | main agent (+ specialized review panel) |
-| 8 | `/open-mr` | main agent (+ CI & review monitor) |
-| 9 | `/eop` | main agent (terminal) |
+| 3 | `/grill-me` | main agent (interactive decision-tree interview) |
+| 4 | `/pre-flight` | main agent (+ `pre-flight` auditors, iterative) |
+| 5 | `/update-plan` | main agent (+ conditional explorers) |
+| 6 | `/converge-plan` | main agent (orchestrates pre-flight ⇄ update-plan) |
+| 7 | `/execute-plan` | **main agent** (+ `execute-plan-tests` + `execute-plan`) |
+| 8 | `/codereview` | main agent (+ specialized review panel) |
+| 9 | `/open-mr` | main agent (+ CI & review monitor) |
+| 10 | `/eop` | main agent (terminal) |

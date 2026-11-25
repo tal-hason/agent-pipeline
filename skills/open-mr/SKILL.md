@@ -1,7 +1,7 @@
 ---
 name: open-mr
 description: >-
-  Stage 8 of the agent pipeline. Pushes the feature branch, opens a Pull Request (gh) or
+  Stage 9 of the agent pipeline. Pushes the feature branch, opens a Pull Request (gh) or
   Merge Request (glab), monitors CI checks and automated/human code reviews, verifies
   findings against source, and merges when all safety gates pass.
 ---
@@ -231,10 +231,11 @@ Stop at ready-to-merge without merging.
 | :--- | :--- | :--- |
 | 1 | `/architect-bootstrap` | main agent (+ scan panel) |
 | 2 | `/create-plan` | main agent (+ explorers) |
-| 3 | `/pre-flight` | main agent (+ auditors, iterative) |
-| 4 | `/update-plan` | main agent (+ conditional explorers) |
-| 5 | `/converge-plan` | main agent (orchestrates pre-flight ⇄ update-plan) |
-| 6 | `/execute-plan` | main agent (+ test specifier + executor) |
-| 7 | `/codereview` | main agent (+ review panel) |
-| 8 | `/open-mr` | **main agent** (+ CI & review monitor) |
-| 9 | `/eop` | main agent (terminal) |
+| 3 | `/grill-me` | main agent (interactive decision-tree interview) |
+| 4 | `/pre-flight` | main agent (+ auditors, iterative) |
+| 5 | `/update-plan` | main agent (+ conditional explorers) |
+| 6 | `/converge-plan` | main agent (orchestrates pre-flight ⇄ update-plan) |
+| 7 | `/execute-plan` | main agent (+ test specifier + executor) |
+| 8 | `/codereview` | main agent (+ review panel) |
+| 9 | `/open-mr` | **main agent** (+ CI & review monitor) |
+| 10 | `/eop` | main agent (terminal) |

@@ -52,7 +52,7 @@ Read `skills-cursor/canvas/SKILL.md` before authoring.
 
 6. **Platform Economics** (when platform repo) — Innovation, Cimarron, Railway/Guardrail verdicts.
 
-7. **Pipeline footer** — `bootstrap → create-plan → pre-flight ⇄ update-plan → execute-plan → codereview → open-mr → eop`; note brainstorm doc handoff if any.
+7. **Pipeline footer** — `bootstrap → create-plan → grill-me → pre-flight ⇄ update-plan → execute-plan → codereview → open-mr → eop`; note brainstorm doc handoff if any.
 
 8. **Footer** — `Text` `tone="secondary"` `size="small"`: files directly validated.
 

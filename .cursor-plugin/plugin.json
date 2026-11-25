@@ -1,8 +1,8 @@
 {
   "name": "agent-pipeline",
   "displayName": "Agent Pipeline",
-  "version": "1.0.0",
-  "description": "Structured 9-stage engineering pipeline (bootstrap, plan, pre-flight, update, converge, Red-First ATDD execution, multi-reviewer code review, PR/MR monitor, and continual learning) with 15 skills, 69 subagents, and architecture rules.",
+  "version": "1.1.0",
+  "description": "Structured 10-stage engineering pipeline (bootstrap, plan, grill-me, pre-flight, update, converge, Red-First ATDD execution, multi-reviewer code review, PR/MR monitor, and continual learning) with 16 skills, 69 subagents, and architecture rules.",
   "author": {
     "name": "Tal Hason",
     "url": "https://github.com/tal-hason"

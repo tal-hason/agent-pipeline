@@ -1,55 +1,62 @@
 # How to Use the Agent Pipeline
 
-A team guide for the 9-stage agent pipeline that turns a vague idea into reviewed, shipped, and documented code.
+A team guide for the 10-stage agent pipeline that turns a vague idea into reviewed, shipped, and documented code.
 
 ## The Pipeline at a Glance
 
 ```mermaid
 flowchart TD
-    subgraph P1 ["Phase 1 · Sense & Design (WHERE · WHAT · HOW)"]
+    subgraph P1 ["Phase 1 · Sense, Design & Align (WHERE · WHAT · HOW)"]
         S1(["1 · /architect-bootstrap — Scan, Ideate & Canvas Brief"])
         S2["2 · /create-plan — 3x Explorers, Plan & 4-Layer ATDD Spec"]
+        S3(["3 · /grill-me — Decision-Tree Interview (1 Q/Turn + Recommended)"])
     end
 
     subgraph P2 ["Phase 2 · Readiness & Convergence (Setpoint Audit)"]
-        S3{"3 · /pre-flight — 3x Auditors (≥ 90% Gate)"}
-        S4["4 · /update-plan — Amendment Ledger & Coherence Gate"]
-        S5[["5 · /converge-plan — Auto Loop (Max 3 Rounds, Stall Guard)"]]
+        S4{"4 · /pre-flight — 3x Auditors (≥ 90% Gate)"}
+        S5["5 · /update-plan — Amendment Ledger & Coherence Gate"]
+        S6[["6 · /converge-plan — Auto Loop (Max 3 Rounds, Stall Guard)"]]
     end
 
     subgraph P3 ["Phase 3 · Closed-Loop ATDD Execution & Review"]
-        S6["6 · /execute-plan — Red Harness → Contract Lock → Green SUT"]
-        S7{"7 · /codereview — R1–R6 Security & Architecture Panel"}
+        S7["7 · /execute-plan — Red Harness → Contract Lock → Green SUT"]
+        S8{"8 · /codereview — R1–R6 Security & Architecture Panel"}
     end
 
     subgraph P4 ["Phase 4 · Ship & Compound Knowledge"]
-        S8["8 · /open-mr — PR/MR Creation, CI & Review Monitor"]
-        S9(["9 · /eop — Docs, AGENTS.md Learnings & Session Digest"])
+        S9["9 · /open-mr — PR/MR Creation, CI & Review Monitor"]
+        S10(["10 · /eop — Docs, AGENTS.md Learnings & Session Digest"])
     end
 
     S1 -->|"Canvas + Scope"| S2
-    S2 -->|"Manual Audit"| S3
-    S2 -.->|"Auto Converge"| S5
-    S3 -->|"< 90% · Path to Green"| S4
-    S4 -->|"Re-score Plan"| S3
-    S5 <-->|"Orchestrates 3 ⇄ 4"| S3
-    S3 -->|"Ready (≥ 90%) or Override"| S6
-    S5 -->|"Converged (≥ 90%)"| S6
-    S6 -->|"Sealed Tests Green"| S7
-    S7 -.->|"Fix Findings"| S6
-    S7 -.->|"Plan-Level Gap"| S4
-    S7 -->|"Clean Verdict"| S8
-    S8 -->|"Safe Gates Merged"| S9
+    S2 -->|"Draft .plan.md"| S3
+    S2 -.->|"Skip if Trivial"| S4
+    S3 -->|"Decisions Locked"| S4
+    S3 -.->|"Auto Converge"| S6
+    S4 -->|"< 90% · Path to Green"| S5
+    S5 -->|"Re-score Plan"| S4
+    S6 <-->|"Orchestrates 4 ⇄ 5"| S4
+    S4 -.->|"User-Decision Gaps"| S3
+    S6 -.->|"Pause / Stall on Decisions"| S3
+    S4 -->|"Ready (≥ 90%) or Override"| S7
+    S6 -->|"Converged (≥ 90%)"| S7
+    S7 -->|"Sealed Tests Green"| S8
+    S8 -.->|"Fix Findings"| S7
+    S8 -.->|"Plan-Level Gap"| S5
+    S8 -->|"Clean Verdict"| S9
+    S9 -->|"Safe Gates Merged"| S10
 
     classDef entryExit fill:#0f172a,stroke:#38bdf8,stroke-width:2.5px,color:#f8fafc
+    classDef interview fill:#3b0764,stroke:#e879f9,stroke-width:2.5px,color:#fdf4ff
     classDef action fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#f8fafc
     classDef gate fill:#451a03,stroke:#f59e0b,stroke-width:2.5px,color:#fef3c7
     classDef loopNode fill:#064e3b,stroke:#34d399,stroke-width:2.5px,color:#ecfdf5
 
-    class S1,S9 entryExit
-    class S2,S4,S6,S8 action
-    class S3,S7 gate
-    class S5 loopNode
+    class S1,S10 entryExit
+    class S3 interview
+    class S2,S5,S7,S9 action
+    class S4,S8 gate
+    class S6 loopNode
 
     style P1 fill:transparent,stroke:#64748b,stroke-width:1.5px,stroke-dasharray: 5 5
     style P2 fill:transparent,stroke:#64748b,stroke-width:1.5px,stroke-dasharray: 5 5
@@ -57,12 +64,13 @@ flowchart TD
     style P4 fill:transparent,stroke:#64748b,stroke-width:1.5px,stroke-dasharray: 5 5
 ```
 
-Each stage feeds into the next. You can enter the pipeline at any point, but earlier stages give the agent better context. `/update-plan` bakes Path to Green into the plan; `/converge-plan` runs `/pre-flight` ⇄ `/update-plan` until Ready (or stall / max rounds / pause) without auto-executing. `/open-mr` pushes the branch, creates the PR/MR, monitors CI and reviews, and merges when safe.
+Each stage feeds into the next. You can enter the pipeline at any point, but earlier stages give the agent better context. `/grill-me` interviews you down every unresolved branch of a plan's decision tree (both right after `/create-plan` and whenever `/pre-flight` or `/converge-plan` surfaces `user-decision` trade-offs). `/update-plan` bakes Path to Green into the plan; `/converge-plan` runs `/pre-flight` ⇄ `/update-plan` until Ready (or stall / max rounds / pause) without auto-executing. `/open-mr` pushes the branch, creates the PR/MR, monitors CI and reviews, and merges when safe.
 
 | Stage | Recommended Mode | What it does | Output |
 |---|---|---|---|
 | `/architect-bootstrap` | **Agent** or **Ask** | Scans the workspace, discovers tech stack, boundaries, and risks. Optionally runs brainstorming if scope is unclear. | Interactive canvas + situational brief |
 | `/create-plan` | **Plan** | Builds an atomic, step-by-step implementation plan with 4-layer ATDD test specifications. | `{slug}.plan.md` |
+| `/grill-me` | **Plan** or **Agent** | Depth-first decision-tree interview (1 question/turn with `(Recommended)` stance; codebase probed first). Also used post `/pre-flight` or `/converge-plan` when decisions block readiness. | Locked Decisions Ledger + updated `{slug}.plan.md` |
 | `/pre-flight` | **Agent** or **Plan** | Audits the plan for risks, gaps, and feasibility. Iterative — run as many times as needed. | Timestamped review with confidence % |
 | `/update-plan` | **Plan** (Agent if explorers needed) | Bakes Path to Green into `.plan.md` (surgical amendments + targeted evidence when needed). | Updated plan + Amendment Ledger |
 | `/converge-plan` | **Agent** | Automates `/pre-flight` ⇄ `/update-plan` until ≥90% Ready, stall, max rounds (default 3), or user-decision pause. Never auto-executes. | Converge outcome + nested reports |
@@ -77,6 +85,7 @@ Not every stage needs Agent mode. The mode should match the nature of the work:
 
 - **`/architect-bootstrap`** — Use **Ask mode** when exploring a fresh idea or unfamiliar codebase (read-only reconnaissance). Switch to **Agent mode** when you want the full scanning pipeline with canvas generation and subagents.
 - **`/create-plan`** — Use **Plan mode**. Planning is a collaborative design activity, not an execution task. Plan mode keeps the focus on thinking through the approach before committing to implementation.
+- **`/grill-me`** — Either **Plan** or **Agent** works. Runs interactively in the main session (never as a background subagent) to lock design decisions into `.plan.md`.
 - **`/pre-flight`** — Either **Agent** or **Plan** works. Use Agent mode when you want the full auditor panel dispatched. Use Plan mode when you want to review and discuss the plan collaboratively before auditing.
 - **`/update-plan`** — Prefer **Plan mode**. Rewrites the plan from Path to Green; switches to Agent only when targeted explorers must read the repo.
 - **`/converge-plan`** — **Agent mode** only. Orchestrates nested `/pre-flight` + `/update-plan` rounds until a stop condition.
@@ -199,6 +208,21 @@ Run after bootstrap. The agent reads the canvas brief and builds an atomic plan.
 - Presents the full plan for your review before proceeding
 
 **Tip:** If bootstrap produced a brainstorm requirements doc, the plan will reference it.
+
+### `/grill-me`
+
+```
+/grill-me
+```
+
+Run right after `/create-plan` (default design stress-test), or whenever `/pre-flight` / `/converge-plan` pauses or stalls on `user-decision` trade-offs.
+
+- Probes the codebase first so it never asks questions code can answer
+- Walks down the plan's decision tree depth-first, asking **strictly one question per turn**
+- Always leads with a **`(Recommended)`** answer and brief rationale
+- Locks resolved choices directly into `.plan.md` (steps, frontmatter `todos`, 4-layer ATDD scenarios, and `Revision History`) before `/pre-flight` or `/converge-plan`
+
+**Tip:** Use `/grill-me` after `/create-plan` to eliminate ambiguity upfront so `/pre-flight` and `/converge-plan` converge in fewer rounds.
 
 ### `/pre-flight`
 
@@ -341,6 +365,7 @@ Run after `/open-mr` merges (or when closing early). Closes the pipeline.
 | Build a new feature | `/architect-bootstrap ~/Git/repo` + describe the feature |
 | Figure out what to build | `/architect-bootstrap ~/Git/repo` + vague idea (triggers brainstorm) |
 | Plan without scanning | `/create-plan` (skip bootstrap) |
+| Stress-test a plan or resolve open trade-offs | `/grill-me` |
 | Re-audit after plan changes | `/pre-flight` (iterative, run again) |
 | Apply Path to Green into the plan | `/update-plan` then `/pre-flight` |
 | Auto-loop to ≥90% soft gate | `/converge-plan` |
@@ -390,12 +415,13 @@ This gives the agent a clean context window with a sharp, well-defined intent. F
 1. **Bootstrap** scans the workspace against your specific feature prompt
 2. **Brainstorm / focus / probe** — if the agent enters ideation, work through it. Sharpen scope, challenge assumptions, validate feasibility against the codebase
 3. **`/create-plan`** — only run this after you're confident the intent is solid and the bootstrap canvas reflects reality
-4. **`/pre-flight`** — audit the plan (single pass)
-5. **`/converge-plan`** — optional: auto-loop `/pre-flight` ⇄ `/update-plan` to ≥90% (or run them manually)
-6. **`/execute-plan`** — implement via Red-First ATDD
-7. **`/codereview`** — review
-8. **`/open-mr`** — open PR/MR, monitor CI & reviews, merge when safe
-9. **`/eop`** — capture learnings into `AGENTS.md` and compress context for next time
+4. **`/grill-me`** — optional (recommended for non-trivial plans): resolve decision-tree branches 1 question at a time and lock them into `.plan.md`
+5. **`/pre-flight`** — audit the plan (single pass)
+6. **`/converge-plan`** — optional: auto-loop `/pre-flight` ⇄ `/update-plan` to ≥90% (re-enter `/grill-me` if it pauses on user decisions)
+7. **`/execute-plan`** — implement via Red-First ATDD
+8. **`/codereview`** — review
+9. **`/open-mr`** — open PR/MR, monitor CI & reviews, merge when safe
+10. **`/eop`** — capture learnings into `AGENTS.md` and compress context for next time
 
 ### Why Two Sessions?
 

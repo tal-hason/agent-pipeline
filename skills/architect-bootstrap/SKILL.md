@@ -220,10 +220,11 @@ End with one of:
 | :--- | :--- | :--- |
 | 1 | `/architect-bootstrap` | **main agent** (Canvas author) + specialized readonly scanners |
 | 2 | `/create-plan` | main agent (+ evidence explorers) |
-| 3 | `/pre-flight` | main agent (+ `pre-flight` auditors, iterative) |
-| 4 | `/update-plan` | main agent (+ conditional explorers) |
-| 5 | `/converge-plan` | main agent (orchestrates pre-flight ⇄ update-plan) |
-| 6 | `/execute-plan` | main agent (+ test specifier + executor) |
-| 7 | `/codereview` | main agent (+ specialized review panel) |
-| 8 | `/open-mr` | main agent (+ CI & review monitor) |
-| 9 | `/eop` | main agent (terminal) |
+| 3 | `/grill-me` | main agent (interactive decision-tree interview) |
+| 4 | `/pre-flight` | main agent (+ `pre-flight` auditors, iterative) |
+| 5 | `/update-plan` | main agent (+ conditional explorers) |
+| 6 | `/converge-plan` | main agent (orchestrates pre-flight ⇄ update-plan) |
+| 7 | `/execute-plan` | main agent (+ test specifier + executor) |
+| 8 | `/codereview` | main agent (+ specialized review panel) |
+| 9 | `/open-mr` | main agent (+ CI & review monitor) |
+| 10 | `/eop` | main agent (terminal) |

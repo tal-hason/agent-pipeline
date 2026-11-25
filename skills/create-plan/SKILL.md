@@ -30,7 +30,7 @@ The only subagents you may spawn are the **3 evidence explorers** in Step 3 (`re
 | 7 | Main agent | Verification & 4-layer ATDD Test Specification | Every affected file maps to ≥1 scenario |
 | 8 | Main agent | Write `.plan.md` & present full plan | User can review full plan in this chat |
 
-**Next in pipeline (after user approves):** `/pre-flight` or `/converge-plan` → `/execute-plan` → `/codereview` → `/open-mr` → `/eop`
+**Next in pipeline (after user approves):** `/grill-me` (recommended) → `/pre-flight` or `/converge-plan` → `/execute-plan` → `/codereview` → `/open-mr` → `/eop`
 
 ---
 
@@ -269,7 +269,7 @@ Plans may be committed to repositories and reviewed across environments. Strict 
 
 ### 8d. Present in conversation
 1. **Paste the full plan in this conversation** — not only on disk, not only in subagent output.
-2. End with: *"Plan written. Review the plan above. When approved, run `/pre-flight` or `/converge-plan`."*
+2. End with: *"Plan written. Run `/grill-me` to stress-test design decisions interactively (recommended), or `/pre-flight` / `/converge-plan` if decisions are already locked."*
 
 ---
 
@@ -294,10 +294,11 @@ Plans may be committed to repositories and reviewed across environments. Strict 
 | :--- | :--- | :--- |
 | 1 | `/architect-bootstrap` | main agent (+ scan panel) |
 | 2 | `/create-plan` | **main agent** (+ explorer subagents in Step 3 only) |
-| 3 | `/pre-flight` | main agent (+ `pre-flight` auditors) |
-| 4 | `/update-plan` | main agent (+ conditional explorers) |
-| 5 | `/converge-plan` | main agent (orchestrates pre-flight ⇄ update-plan) |
-| 6 | `/execute-plan` | main agent (+ test specifier + executor) |
-| 7 | `/codereview` | main agent (+ specialized review panel) |
-| 8 | `/open-mr` | main agent (+ CI & review monitor) |
-| 9 | `/eop` | main agent (terminal) |
+| 3 | `/grill-me` | main agent (interactive decision-tree interview) |
+| 4 | `/pre-flight` | main agent (+ `pre-flight` auditors) |
+| 5 | `/update-plan` | main agent (+ conditional explorers) |
+| 6 | `/converge-plan` | main agent (orchestrates pre-flight ⇄ update-plan) |
+| 7 | `/execute-plan` | main agent (+ test specifier + executor) |
+| 8 | `/codereview` | main agent (+ specialized review panel) |
+| 9 | `/open-mr` | main agent (+ CI & review monitor) |
+| 10 | `/eop` | main agent (terminal) |

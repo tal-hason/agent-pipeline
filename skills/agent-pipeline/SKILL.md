@@ -1,11 +1,12 @@
 ---
 name: agent-pipeline
 description: >-
-  Orchestrates the 9-stage agent pipeline: /architect-bootstrap (scan & brief),
-  /create-plan (evidence-backed plan), /pre-flight (confidence audit), /update-plan
-  (surgical plan amendment), /converge-plan (automated pre-flight ⇄ update-plan loop),
-  /execute-plan (Red-First ATDD implementation), /codereview (multi-reviewer panel),
-  /open-mr (PR/MR creation & CI/review monitor), and /eop (session digest & continual learning).
+  Orchestrates the 10-stage agent pipeline: /architect-bootstrap (scan & brief),
+  /create-plan (evidence-backed plan), /grill-me (decision-tree alignment interview),
+  /pre-flight (confidence audit), /update-plan (surgical plan amendment), /converge-plan
+  (automated pre-flight ⇄ update-plan loop), /execute-plan (Red-First ATDD implementation),
+  /codereview (multi-reviewer panel), /open-mr (PR/MR creation & CI/review monitor),
+  and /eop (session digest & continual learning).
 ---
 
 # Agent Pipeline Contract
@@ -27,62 +28,70 @@ Every pipeline skill starts by reading `AGENTS.md` (workspace and user-level if 
 | :--- | :--- | :--- | :--- |
 | 1 | `architect-bootstrap` | `AGENTS.md`, `README`, manifests, existing `docs/brainstorms/` | `architect-brief.canvas.tsx` + chat brief |
 | 2 | `create-plan` | `AGENTS.md`, bootstrap canvas brief, `docs/brainstorms/` | `.agents/plans/{slug}.plan.md` |
-| 3 | `pre-flight` | `AGENTS.md`, `{slug}.plan.md`, prior `*-Pre-Flight-Review_*.md` | `{slug}-Pre-Flight-Review_*.md` |
-| 4 | `update-plan` | `AGENTS.md`, `{slug}.plan.md`, latest `*-Pre-Flight-Review_*.md` | Updated `{slug}.plan.md` + Amendment Ledger |
-| 5 | `converge-plan` | `AGENTS.md`, `{slug}.plan.md`, prior `*-Pre-Flight-Review_*.md` | `{slug}-converge-outcome_*.md` (nested stages write their own artifacts) |
-| 6 | `execute-plan` | `AGENTS.md`, `{slug}.plan.md`, latest `*-Pre-Flight-Review_*.md` | Updated todos + sealed tests + code changes + `{slug}-execution-outcome_*.md` |
-| 7 | `codereview` | `AGENTS.md`, `{slug}.plan.md`, execution outcome, git diff | `{slug}-Code_Review_*.md` |
-| 8 | `open-mr` | `AGENTS.md`, `{slug}.plan.md`, latest `*-Code_Review_*.md` | PR/MR URL + `{slug-or-branch}-open-mr-outcome_*.md` |
-| 9 | `eop` | `AGENTS.md`, all session artifacts produced in stages 1–8 | `.agents/digests/{slug}-session-digest_*.md` + `AGENTS.md` delta |
+| 3 | `grill-me` | `AGENTS.md`, `{slug}.plan.md`, latest pre-flight / converge outcome (if any) | Locked Decisions Ledger + updated `{slug}.plan.md` |
+| 4 | `pre-flight` | `AGENTS.md`, `{slug}.plan.md`, prior `*-Pre-Flight-Review_*.md` | `{slug}-Pre-Flight-Review_*.md` |
+| 5 | `update-plan` | `AGENTS.md`, `{slug}.plan.md`, latest `*-Pre-Flight-Review_*.md` | Updated `{slug}.plan.md` + Amendment Ledger |
+| 6 | `converge-plan` | `AGENTS.md`, `{slug}.plan.md`, prior `*-Pre-Flight-Review_*.md` | `{slug}-converge-outcome_*.md` (nested stages write their own artifacts) |
+| 7 | `execute-plan` | `AGENTS.md`, `{slug}.plan.md`, latest `*-Pre-Flight-Review_*.md` | Updated todos + sealed tests + code changes + `{slug}-execution-outcome_*.md` |
+| 8 | `codereview` | `AGENTS.md`, `{slug}.plan.md`, execution outcome, git diff | `{slug}-Code_Review_*.md` |
+| 9 | `open-mr` | `AGENTS.md`, `{slug}.plan.md`, latest `*-Code_Review_*.md` | PR/MR URL + `{slug-or-branch}-open-mr-outcome_*.md` |
+| 10 | `eop` | `AGENTS.md`, all session artifacts produced in stages 1–9 | `.agents/digests/{slug}-session-digest_*.md` + `AGENTS.md` delta |
 
 ## Flow
 
 ```mermaid
 flowchart TD
-    subgraph P1 ["Phase 1 · Sense & Design (WHERE · WHAT · HOW)"]
+    subgraph P1 ["Phase 1 · Sense, Design & Align (WHERE · WHAT · HOW)"]
         S1(["1 · /architect-bootstrap — Scan, Ideate & Canvas Brief"])
         S2["2 · /create-plan — 3x Explorers, Plan & 4-Layer ATDD Spec"]
+        S3(["3 · /grill-me — Decision-Tree Interview (1 Q/Turn + Recommended)"])
     end
 
     subgraph P2 ["Phase 2 · Readiness & Convergence (Setpoint Audit)"]
-        S3{"3 · /pre-flight — 3x Auditors (≥ 90% Gate)"}
-        S4["4 · /update-plan — Amendment Ledger & Coherence Gate"]
-        S5[["5 · /converge-plan — Auto Loop (Max 3 Rounds, Stall Guard)"]]
+        S4{"4 · /pre-flight — 3x Auditors (≥ 90% Gate)"}
+        S5["5 · /update-plan — Amendment Ledger & Coherence Gate"]
+        S6[["6 · /converge-plan — Auto Loop (Max 3 Rounds, Stall Guard)"]]
     end
 
     subgraph P3 ["Phase 3 · Closed-Loop ATDD Execution & Review"]
-        S6["6 · /execute-plan — Red Harness → Contract Lock → Green SUT"]
-        S7{"7 · /codereview — R1–R6 Security & Architecture Panel"}
+        S7["7 · /execute-plan — Red Harness → Contract Lock → Green SUT"]
+        S8{"8 · /codereview — R1–R6 Security & Architecture Panel"}
     end
 
     subgraph P4 ["Phase 4 · Ship & Compound Knowledge"]
-        S8["8 · /open-mr — PR/MR Creation, CI & Review Monitor"]
-        S9(["9 · /eop — Docs, AGENTS.md Learnings & Session Digest"])
+        S9["9 · /open-mr — PR/MR Creation, CI & Review Monitor"]
+        S10(["10 · /eop — Docs, AGENTS.md Learnings & Session Digest"])
     end
 
     S1 -->|"Canvas + Scope"| S2
-    S2 -->|"Manual Audit"| S3
-    S2 -.->|"Auto Converge"| S5
-    S3 -->|"< 90% · Path to Green"| S4
-    S4 -->|"Re-score Plan"| S3
-    S5 <-->|"Orchestrates 3 ⇄ 4"| S3
-    S3 -->|"Ready (≥ 90%) or Override"| S6
-    S5 -->|"Converged (≥ 90%)"| S6
-    S6 -->|"Sealed Tests Green"| S7
-    S7 -.->|"Fix Findings"| S6
-    S7 -.->|"Plan-Level Gap"| S4
-    S7 -->|"Clean Verdict"| S8
-    S8 -->|"Safe Gates Merged"| S9
+    S2 -->|"Draft .plan.md"| S3
+    S2 -.->|"Skip if Trivial"| S4
+    S3 -->|"Decisions Locked"| S4
+    S3 -.->|"Auto Converge"| S6
+    S4 -->|"< 90% · Path to Green"| S5
+    S5 -->|"Re-score Plan"| S4
+    S6 <-->|"Orchestrates 4 ⇄ 5"| S4
+    S4 -.->|"User-Decision Gaps"| S3
+    S6 -.->|"Pause / Stall on Decisions"| S3
+    S4 -->|"Ready (≥ 90%) or Override"| S7
+    S6 -->|"Converged (≥ 90%)"| S7
+    S7 -->|"Sealed Tests Green"| S8
+    S8 -.->|"Fix Findings"| S7
+    S8 -.->|"Plan-Level Gap"| S5
+    S8 -->|"Clean Verdict"| S9
+    S9 -->|"Safe Gates Merged"| S10
 
     classDef entryExit fill:#0f172a,stroke:#38bdf8,stroke-width:2.5px,color:#f8fafc
+    classDef interview fill:#3b0764,stroke:#e879f9,stroke-width:2.5px,color:#fdf4ff
     classDef action fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#f8fafc
     classDef gate fill:#451a03,stroke:#f59e0b,stroke-width:2.5px,color:#fef3c7
     classDef loopNode fill:#064e3b,stroke:#34d399,stroke-width:2.5px,color:#ecfdf5
 
-    class S1,S9 entryExit
-    class S2,S4,S6,S8 action
-    class S3,S7 gate
-    class S5 loopNode
+    class S1,S10 entryExit
+    class S3 interview
+    class S2,S5,S7,S9 action
+    class S4,S8 gate
+    class S6 loopNode
 
     style P1 fill:transparent,stroke:#64748b,stroke-width:1.5px,stroke-dasharray: 5 5
     style P2 fill:transparent,stroke:#64748b,stroke-width:1.5px,stroke-dasharray: 5 5
@@ -96,18 +105,21 @@ flowchart TD
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | 1 | `architect-bootstrap` | main agent | **WHAT:** ideation (main agent, Step 2.5 when vague). **WHERE:** scanners A–C + conditional D–J | Canvas + situational brief (+ optional `docs/brainstorms/` requirements) | [architect-bootstrap](../architect-bootstrap/SKILL.md) |
 | 2 | `create-plan` | main agent | 3× evidence explorers (`ce-repo-research-analyst`, `explore`, `ce-correctness-reviewer`) | `{slug}.plan.md` | [create-plan](../create-plan/SKILL.md) |
-| 3 | `pre-flight` | main agent | 3× `pre-flight` auditors (+ optional `ce-security-lens-reviewer`) | `{slug}-Pre-Flight-Review_*.md` | [pre-flight](../pre-flight/SKILL.md) |
-| 4 | `update-plan` | main agent | Conditional: 0–2 targeted explorers (`explore`, `ce-correctness-reviewer`) for `evidence-gap` only | Updated `{slug}.plan.md` + Amendment Ledger | [update-plan](../update-plan/SKILL.md) |
-| 5 | `converge-plan` | main agent | Orchestrates nested `/pre-flight` + `/update-plan` | `{slug}-converge-outcome_*.md` | [converge-plan](../converge-plan/SKILL.md) |
-| 6 | `execute-plan` | main agent | Red-First ATDD: 1× `execute-plan-tests` (Red harness) → Contract Lock → 1× `execute-plan` (Green implementation) | Updated plan todos + sealed tests + code changes + reconciliation | [execute-plan](../execute-plan/SKILL.md) |
-| 7 | `codereview` | main agent | Core R1–R6 (**R5/R6 security always** except docs-only) + conditional `ce-*` auditors | `{slug}-Code_Review_*.md` | [codereview](../codereview/SKILL.md) |
-| 8 | `open-mr` | main agent | None (`gh` / `glab` CLI monitor) | PR/MR URL + `{slug-or-branch}-open-mr-outcome_*.md` | [open-mr](../open-mr/SKILL.md) |
-| 9 | `eop` | main agent | None (terminal) | `{slug}-session-digest_*.md` + `AGENTS.md` delta + doc/issue updates | [eop](../eop/SKILL.md) |
+| 3 | `grill-me` | main agent | None (interactive decision-tree interview; probes codebase directly) | Locked Decisions Ledger + updated `{slug}.plan.md` | [grill-me](../grill-me/SKILL.md) |
+| 4 | `pre-flight` | main agent | 3× `pre-flight` auditors (+ optional `ce-security-lens-reviewer`) | `{slug}-Pre-Flight-Review_*.md` | [pre-flight](../pre-flight/SKILL.md) |
+| 5 | `update-plan` | main agent | Conditional: 0–2 targeted explorers (`explore`, `ce-correctness-reviewer`) for `evidence-gap` only | Updated `{slug}.plan.md` + Amendment Ledger | [update-plan](../update-plan/SKILL.md) |
+| 6 | `converge-plan` | main agent | Orchestrates nested `/pre-flight` + `/update-plan` | `{slug}-converge-outcome_*.md` | [converge-plan](../converge-plan/SKILL.md) |
+| 7 | `execute-plan` | main agent | Red-First ATDD: 1× `execute-plan-tests` (Red harness) → Contract Lock → 1× `execute-plan` (Green implementation) | Updated plan todos + sealed tests + code changes + reconciliation | [execute-plan](../execute-plan/SKILL.md) |
+| 8 | `codereview` | main agent | Core R1–R6 (**R5/R6 security always** except docs-only) + conditional `ce-*` auditors | `{slug}-Code_Review_*.md` | [codereview](../codereview/SKILL.md) |
+| 9 | `open-mr` | main agent | None (`gh` / `glab` CLI monitor) | PR/MR URL + `{slug-or-branch}-open-mr-outcome_*.md` | [open-mr](../open-mr/SKILL.md) |
+| 10 | `eop` | main agent | None (terminal) | `{slug}-session-digest_*.md` + `AGENTS.md` delta + doc/issue updates | [eop](../eop/SKILL.md) |
 
 ## Iteration rules
 
 | Loop | Behavior |
 | :--- | :--- |
+| **`create-plan → grill-me → pre-flight / converge-plan`** | **Default design alignment.** Stress-test every branch of `.plan.md`'s decision tree interactively before running auditors. Skip only for Clear/trivial plans. |
+| **`pre-flight / converge-plan → grill-me`** | **Conditional blocker resolution.** When `/pre-flight`, `/update-plan`, or `/converge-plan` pauses or stalls on `user-decision` trade-offs, run `/grill-me` to lock decisions into `.plan.md`, then re-run `/pre-flight` or `/converge-plan`. |
 | **`/converge-plan`** | **Automated path to green.** Runs `/pre-flight` ⇄ `/update-plan` until Ready (≥90%, not Stop), stall, max rounds (default 3), user-decision pause, or redesign abort. **Never** auto-executes. |
 | **pre-flight → update-plan → pre-flight** | Manual path to green (same mechanics, user re-invokes). |
 | **pre-flight → pre-flight** | Allowed if the user already edited the plan manually. Prefer `/update-plan` or `/converge-plan`. |
@@ -121,7 +133,7 @@ flowchart TD
 `/execute-plan` reads the **latest** `*-Pre-Flight-Review_*.md` for the plan slug:
 
 - **≥ 90%** and not Stop → proceed
-- **< 90%** or Stop → show blockers; suggest **`/converge-plan`** or **`/update-plan`** then `/pre-flight`, or **explicitly override** to execute anyway
+- **< 90%** or Stop → show blockers; suggest **`/converge-plan`** or **`/update-plan`** then `/pre-flight` (or **`/grill-me`** if blocked on `user-decision` trade-offs), or **explicitly override** to execute anyway
 - **No report** → recommend `/pre-flight` or `/converge-plan` first; user may override
 
 ## Worker subagents (by stage)
@@ -132,14 +144,15 @@ Main agent owns each deliverable. Dispatch **workers only** with the Context Pac
 | :--- | :--- | :--- | :--- |
 | 1 | `architect-bootstrap` | `ce-repo-research-analyst`, `explore`, `ce-architecture-strategist`, compat lane (`D–G`), `ce-git-history-analyzer`, … | `../../references/architect-brief-canvas.md` |
 | 2 | `create-plan` | `ce-repo-research-analyst`, `explore`, `ce-correctness-reviewer` | [create-plan](../create-plan/SKILL.md) |
-| 3 | `pre-flight` | `pre-flight` (×3), optional `ce-security-lens-reviewer` | `../../agents/pre-flight.md` |
-| 4 | `update-plan` | Conditional `explore` / `ce-correctness-reviewer` (evidence-gap only) | [update-plan](../update-plan/SKILL.md) |
-| 5 | `converge-plan` | Nested workers from stages 3–4 | [converge-plan](../converge-plan/SKILL.md) |
-| 6 | `execute-plan` | `execute-plan-tests` (Red harness) → `execute-plan` (Green SUT), `probe-runner` (Complex steps) | `../../agents/execute-plan.md`, `../../agents/execute-plan-tests.md` |
-| 7 | `codereview` | `codereview`, `ce-*` panel, `code-reviewer` | `../../agents/codereview.md` |
-| 8 | `open-mr` | None (`gh` / `glab` CLI monitor) | [open-mr](../open-mr/SKILL.md) |
+| 3 | `grill-me` | None (interactive main-agent interview) | [grill-me](../grill-me/SKILL.md) |
+| 4 | `pre-flight` | `pre-flight` (×3), optional `ce-security-lens-reviewer` | `../../agents/pre-flight.md` |
+| 5 | `update-plan` | Conditional `explore` / `ce-correctness-reviewer` (evidence-gap only) | [update-plan](../update-plan/SKILL.md) |
+| 6 | `converge-plan` | Nested workers from stages 4–5 | [converge-plan](../converge-plan/SKILL.md) |
+| 7 | `execute-plan` | `execute-plan-tests` (Red harness) → `execute-plan` (Green SUT), `probe-runner` (Complex steps) | `../../agents/execute-plan.md`, `../../agents/execute-plan-tests.md` |
+| 8 | `codereview` | `codereview`, `ce-*` panel, `code-reviewer` | `../../agents/codereview.md` |
+| 9 | `open-mr` | None (`gh` / `glab` CLI monitor) | [open-mr](../open-mr/SKILL.md) |
 
-**Ideation** runs in the **main agent** during bootstrap Step 2.5 — not as background Task workers.
+Both bootstrap ideation (Step 2.5) and `/grill-me` (Stage 3 / conditional blocker loop) run interactively in the **main agent** — never as background Task workers.
 
 ## Git workflow
 
@@ -167,10 +180,11 @@ work complete → branch out → /codereview → /open-mr (push + PR/MR + monito
 | After skill | CTA |
 | :--- | :--- |
 | `architect-bootstrap` | *"Bootstrap complete. Run `/create-plan` when ready."* |
-| `create-plan` | *"Plan written. Review the plan above. When approved, run `/pre-flight` or `/converge-plan`."* |
-| `pre-flight` | *"Confidence {N}%. Run #{K}. {Ready → `/execute-plan` \| else → `/update-plan` / `/converge-plan`}."* |
-| `update-plan` | *"Plan updated. Run `/pre-flight` or `/converge-plan` to re-score."* |
-| `converge-plan` | Per terminal reason — Ready → `/execute-plan`; else decisions / stall / max / `/create-plan` |
+| `create-plan` | *"Plan written. Run `/grill-me` to stress-test design decisions (recommended), or `/pre-flight` / `/converge-plan` if decisions are already locked."* |
+| `grill-me` | *"Decisions locked into `{slug}.plan.md`. Run `/pre-flight` or `/converge-plan`."* |
+| `pre-flight` | *"Confidence {N}%. Run #{K}. {Ready → `/execute-plan` \| user-decision gaps → `/grill-me` \| else → `/update-plan` / `/converge-plan`}."* |
+| `update-plan` | *"Plan updated. Run `/pre-flight` or `/converge-plan` to re-score."* (Or `/grill-me` if blocked on user decisions.) |
+| `converge-plan` | Per terminal reason — Ready → `/execute-plan`; Pause/Stall on decisions → `/grill-me`; else max / `/create-plan` |
 | `execute-plan` | *"Branch out and run `/codereview`"* (or `/update-plan` / `/converge-plan` if plan gaps) |
 | `codereview` | If clean: *"Run `/open-mr` to push, open the PR/MR, and monitor to merge."* Else fix findings or `/update-plan` / `/converge-plan`. |
 | `open-mr` | Merged → *"Run `/eop`."* Paused/blocked → user action then re-invoke `/open-mr` on the same URL. |

@@ -1,53 +1,60 @@
 # Agent Pipeline
 
-A complete, multi-harness plugin for **Antigravity (`agy`)**, **Cursor**, **Claude Code**, and **Codex** that turns a vague idea into reviewed, shipped, and documented code through nine structured stages.
+A complete, multi-harness plugin for **Antigravity (`agy`)**, **Cursor**, **Claude Code**, and **Codex** that turns a vague idea into reviewed, shipped, and documented code through ten structured stages.
 
 ```mermaid
 flowchart TD
-    subgraph P1 ["Phase 1 · Sense & Design (WHERE · WHAT · HOW)"]
+    subgraph P1 ["Phase 1 · Sense, Design & Align (WHERE · WHAT · HOW)"]
         S1(["1 · /architect-bootstrap — Scan, Ideate & Canvas Brief"])
         S2["2 · /create-plan — 3x Explorers, Plan & 4-Layer ATDD Spec"]
+        S3(["3 · /grill-me — Decision-Tree Interview (1 Q/Turn + Recommended)"])
     end
 
     subgraph P2 ["Phase 2 · Readiness & Convergence (Setpoint Audit)"]
-        S3{"3 · /pre-flight — 3x Auditors (≥ 90% Gate)"}
-        S4["4 · /update-plan — Amendment Ledger & Coherence Gate"]
-        S5[["5 · /converge-plan — Auto Loop (Max 3 Rounds, Stall Guard)"]]
+        S4{"4 · /pre-flight — 3x Auditors (≥ 90% Gate)"}
+        S5["5 · /update-plan — Amendment Ledger & Coherence Gate"]
+        S6[["6 · /converge-plan — Auto Loop (Max 3 Rounds, Stall Guard)"]]
     end
 
     subgraph P3 ["Phase 3 · Closed-Loop ATDD Execution & Review"]
-        S6["6 · /execute-plan — Red Harness → Contract Lock → Green SUT"]
-        S7{"7 · /codereview — R1–R6 Security & Architecture Panel"}
+        S7["7 · /execute-plan — Red Harness → Contract Lock → Green SUT"]
+        S8{"8 · /codereview — R1–R6 Security & Architecture Panel"}
     end
 
     subgraph P4 ["Phase 4 · Ship & Compound Knowledge"]
-        S8["8 · /open-mr — PR/MR Creation, CI & Review Monitor"]
-        S9(["9 · /eop — Docs, AGENTS.md Learnings & Session Digest"])
+        S9["9 · /open-mr — PR/MR Creation, CI & Review Monitor"]
+        S10(["10 · /eop — Docs, AGENTS.md Learnings & Session Digest"])
     end
 
     S1 -->|"Canvas + Scope"| S2
-    S2 -->|"Manual Audit"| S3
-    S2 -.->|"Auto Converge"| S5
-    S3 -->|"< 90% · Path to Green"| S4
-    S4 -->|"Re-score Plan"| S3
-    S5 <-->|"Orchestrates 3 ⇄ 4"| S3
-    S3 -->|"Ready (≥ 90%) or Override"| S6
-    S5 -->|"Converged (≥ 90%)"| S6
-    S6 -->|"Sealed Tests Green"| S7
-    S7 -.->|"Fix Findings"| S6
-    S7 -.->|"Plan-Level Gap"| S4
-    S7 -->|"Clean Verdict"| S8
-    S8 -->|"Safe Gates Merged"| S9
+    S2 -->|"Draft .plan.md"| S3
+    S2 -.->|"Skip if Trivial"| S4
+    S3 -->|"Decisions Locked"| S4
+    S3 -.->|"Auto Converge"| S6
+    S4 -->|"< 90% · Path to Green"| S5
+    S5 -->|"Re-score Plan"| S4
+    S6 <-->|"Orchestrates 4 ⇄ 5"| S4
+    S4 -.->|"User-Decision Gaps"| S3
+    S6 -.->|"Pause / Stall on Decisions"| S3
+    S4 -->|"Ready (≥ 90%) or Override"| S7
+    S6 -->|"Converged (≥ 90%)"| S7
+    S7 -->|"Sealed Tests Green"| S8
+    S8 -.->|"Fix Findings"| S7
+    S8 -.->|"Plan-Level Gap"| S5
+    S8 -->|"Clean Verdict"| S9
+    S9 -->|"Safe Gates Merged"| S10
 
     classDef entryExit fill:#0f172a,stroke:#38bdf8,stroke-width:2.5px,color:#f8fafc
+    classDef interview fill:#3b0764,stroke:#e879f9,stroke-width:2.5px,color:#fdf4ff
     classDef action fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#f8fafc
     classDef gate fill:#451a03,stroke:#f59e0b,stroke-width:2.5px,color:#fef3c7
     classDef loopNode fill:#064e3b,stroke:#34d399,stroke-width:2.5px,color:#ecfdf5
 
-    class S1,S9 entryExit
-    class S2,S4,S6,S8 action
-    class S3,S7 gate
-    class S5 loopNode
+    class S1,S10 entryExit
+    class S3 interview
+    class S2,S5,S7,S9 action
+    class S4,S8 gate
+    class S6 loopNode
 
     style P1 fill:transparent,stroke:#64748b,stroke-width:1.5px,stroke-dasharray: 5 5
     style P2 fill:transparent,stroke:#64748b,stroke-width:1.5px,stroke-dasharray: 5 5
@@ -74,17 +81,18 @@ agent-pipeline/
 │   └── hooks.json                         # Cursor lifecycle hooks (stop + afterFileEdit)
 ├── assets/
 │   └── logo.svg                           # Plugin icon
-├── skills/                                # 15 modular skills (progressive disclosure)
-│   ├── agent-pipeline/SKILL.md            # Canonical 9-stage pipeline orchestrator
+├── skills/                                # 16 modular skills (progressive disclosure)
+│   ├── agent-pipeline/SKILL.md            # Canonical 10-stage pipeline orchestrator
 │   ├── architect-bootstrap/SKILL.md       # Stage 1: workspace scan + canvas brief
 │   ├── create-plan/SKILL.md               # Stage 2: evidence-backed plan + 4-layer ATDD spec
-│   ├── pre-flight/SKILL.md                # Stage 3: confidence audit (iterative, ≥90% gate)
-│   ├── update-plan/SKILL.md               # Stage 4: surgical plan amendment + Coherence Gate
-│   ├── converge-plan/SKILL.md             # Stage 5: automated pre-flight ⇄ update-plan loop
-│   ├── execute-plan/SKILL.md              # Stage 6: Red-First ATDD implementation
-│   ├── codereview/SKILL.md                # Stage 7: multi-reviewer panel
-│   ├── open-mr/SKILL.md                   # Stage 8: PR/MR creation + CI & review monitor
-│   ├── eop/SKILL.md                       # Stage 9: session digest + AGENTS.md learnings
+│   ├── grill-me/SKILL.md                  # Stage 3: decision-tree alignment interview
+│   ├── pre-flight/SKILL.md                # Stage 4: confidence audit (iterative, ≥90% gate)
+│   ├── update-plan/SKILL.md               # Stage 5: surgical plan amendment + Coherence Gate
+│   ├── converge-plan/SKILL.md             # Stage 6: automated pre-flight ⇄ update-plan loop
+│   ├── execute-plan/SKILL.md              # Stage 7: Red-First ATDD implementation
+│   ├── codereview/SKILL.md                # Stage 8: multi-reviewer panel
+│   ├── open-mr/SKILL.md                   # Stage 9: PR/MR creation + CI & review monitor
+│   ├── eop/SKILL.md                       # Stage 10: session digest + AGENTS.md learnings
 │   ├── uiux-expert/SKILL.md               # Standalone: UI/UX design orchestrator
 │   ├── generate-shebangs/SKILL.md         # Standalone: @ai-rules header generator
 │   ├── probe-before-assume/SKILL.md       # Foundational: evidence-first behavior
@@ -185,6 +193,7 @@ The agent scans the workspace, builds a canvas with situational awareness, then 
 
 ```
 /create-plan        # Build atomic implementation plan + 4-layer ATDD test spec
+/grill-me           # Stress-test decision tree 1 question/turn & lock choices (also post pre-flight/converge)
 /pre-flight         # Audit plan confidence (soft gate ≥ 90%)
 /update-plan        # Bake Path to Green into the plan (or /converge-plan to auto-loop)
 /execute-plan       # Implement via Red-First ATDD closed loop

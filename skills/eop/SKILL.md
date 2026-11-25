@@ -1,7 +1,7 @@
 ---
 name: eop
 description: >-
-  Stage 9 (End of Pipeline) of the agent pipeline. Closes the pipeline session
+  Stage 10 (End of Pipeline) of the agent pipeline. Closes the pipeline session
   by updating workspace documentation, checking PR/issue status, capturing continual
   learnings into AGENTS.md, and compressing context into a session digest.
 ---
@@ -97,6 +97,7 @@ Produce a **session digest** — a compressed summary that bridges this session 
 ### Pipeline stages completed
 - /architect-bootstrap: {outcome}
 - /create-plan: {plan slug}
+- /grill-me: {decisions locked or skipped}
 - /pre-flight: {confidence%, run count}
 - /update-plan / /converge-plan: {rounds / summary or skipped}
 - /execute-plan: {outcome}
@@ -155,10 +156,11 @@ End with:
 | :--- | :--- | :--- |
 | 1 | `/architect-bootstrap` | main agent (+ scan panel) |
 | 2 | `/create-plan` | main agent (+ evidence explorers) |
-| 3 | `/pre-flight` | main agent (+ `pre-flight` auditors) |
-| 4 | `/update-plan` | main agent (+ conditional explorers) |
-| 5 | `/converge-plan` | main agent (orchestrates pre-flight ⇄ update-plan) |
-| 6 | `/execute-plan` | main agent (+ test specifier + executor) |
-| 7 | `/codereview` | main agent (+ specialized review panel) |
-| 8 | `/open-mr` | main agent (+ CI & review monitor) |
-| 9 | `/eop` | **main agent** (terminal — no workers) |
+| 3 | `/grill-me` | main agent (interactive decision-tree interview) |
+| 4 | `/pre-flight` | main agent (+ `pre-flight` auditors) |
+| 5 | `/update-plan` | main agent (+ conditional explorers) |
+| 6 | `/converge-plan` | main agent (orchestrates pre-flight ⇄ update-plan) |
+| 7 | `/execute-plan` | main agent (+ test specifier + executor) |
+| 8 | `/codereview` | main agent (+ specialized review panel) |
+| 9 | `/open-mr` | main agent (+ CI & review monitor) |
+| 10 | `/eop` | **main agent** (terminal — no workers) |

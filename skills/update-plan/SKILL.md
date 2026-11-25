@@ -1,7 +1,7 @@
 ---
 name: update-plan
 description: >-
-  Stage 4 of the agent pipeline. Surgical plan updater that builds an Amendment Ledger
+  Stage 5 of the agent pipeline. Surgical plan updater that builds an Amendment Ledger
   from /pre-flight Path to Green or user decisions, dispatches conditional targeted explorers
   for evidence gaps, rewrites {slug}.plan.md in place, and enforces a Coherence Gate.
 ---
@@ -116,7 +116,7 @@ Extract every actionable item from:
 
 **Gate:**
 
-- Any `user-decision` → present options, **wait for user** before applying those rows.
+- Any `user-decision` → present options, **wait for user** before applying those rows (or recommend `/grill-me` when multiple interdependent design decisions remain).
 - Do not mark `defer-to-execute` for items that change contracts, file lists, or control flow — those are `plan-text` or `scope`.
 
 ### Anti-pattern this step exists to prevent
@@ -216,7 +216,7 @@ Before writing is considered done, verify:
 4. Recommended next command:
    - Material plan changes → *"Plan updated. Run `/pre-flight` or `/converge-plan` to re-score toward ≥90%."*
    - Only deferrals and latest pre-flight already ≥90% → *"No material plan gaps left. Run `/execute-plan` when ready."*
-   - Blocked on user decisions → *"Reply with decisions for {A-n…}; then re-run `/update-plan` or `/converge-plan`."*
+   - Blocked on user decisions → *"Run `/grill-me` to lock decisions for {A-n…}, or reply directly and re-run `/update-plan` / `/converge-plan`."*
 
 ---
 
@@ -262,10 +262,11 @@ User decisions applied as ledger rows (`user-decision` → immediate `plan-text`
 | :--- | :--- | :--- |
 | 1 | `/architect-bootstrap` | main agent (+ scan panel) |
 | 2 | `/create-plan` | main agent (+ explorers) |
-| 3 | `/pre-flight` | main agent (+ auditors, iterative) |
-| 4 | `/update-plan` | **main agent** (+ conditional explorers) |
-| 5 | `/converge-plan` | main agent (orchestrates pre-flight ⇄ update-plan) |
-| 6 | `/execute-plan` | main agent (+ test specifier + executor) |
-| 7 | `/codereview` | main agent (+ review panel) |
-| 8 | `/open-mr` | main agent (+ CI & review monitor) |
-| 9 | `/eop` | main agent (terminal) |
+| 3 | `/grill-me` | main agent (interactive decision-tree interview) |
+| 4 | `/pre-flight` | main agent (+ auditors, iterative) |
+| 5 | `/update-plan` | **main agent** (+ conditional explorers) |
+| 6 | `/converge-plan` | main agent (orchestrates pre-flight ⇄ update-plan) |
+| 7 | `/execute-plan` | main agent (+ test specifier + executor) |
+| 8 | `/codereview` | main agent (+ review panel) |
+| 9 | `/open-mr` | main agent (+ CI & review monitor) |
+| 10 | `/eop` | main agent (terminal) |

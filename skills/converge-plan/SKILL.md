@@ -1,7 +1,7 @@
 ---
 name: converge-plan
 description: >-
-  Stage 5 of the agent pipeline. Automates iterative /pre-flight and /update-plan convergence
+  Stage 6 of the agent pipeline. Automates iterative /pre-flight and /update-plan convergence
   rounds toward the ≥90% readiness gate with stall detection and a strict human execution gate.
 ---
 
@@ -92,8 +92,8 @@ Evaluate **in order** — first match wins:
 | :--- | :--- | :--- |
 | 1 | Confidence ≥ 90% **and** status is not Stop | **Ready** — exit loop (success) |
 | 2 | `/update-plan` would need a redesign / unknown blast radius | **Abort** — recommend `/create-plan`; exit |
-| 3 | Path to Green / gaps require `user-decision` items with no answer in invoke message | **Pause** — list decisions; exit (do not guess) |
-| 4 | `N > 1` and confidence **≤** previous round's confidence **and** ≥1 prior blocker still visible in plan text | **Stall** — exit; show recurring blockers |
+| 3 | Path to Green / gaps require `user-decision` items with no answer in invoke message | **Pause** — list decisions; recommend `/grill-me`; exit (do not guess) |
+| 4 | `N > 1` and confidence **≤** previous round's confidence **and** ≥1 prior blocker still visible in plan text | **Stall** — exit; show recurring blockers (recommend `/grill-me` if stalled on design trade-offs) |
 | 5 | `N == max_rounds` | **Max rounds** — exit with latest Path to Green |
 | 6 | Else | Continue to 2c |
 
@@ -151,9 +151,9 @@ Present the same dashboard **in this conversation** (compact table + CTA).
 | Terminal reason | Say |
 | :--- | :--- |
 | Ready | *"Converged at {N}%. Run `/execute-plan` when ready."* |
-| Stall | *"Convergence stalled ({rounds} rounds). Recurring blockers below — decide manually, then `/update-plan` or `/create-plan`, or override into `/execute-plan`."* |
+| Stall | *"Convergence stalled ({rounds} rounds). Recurring blockers below — run `/grill-me` to resolve design trade-offs, then `/update-plan` or `/converge-plan`, or override into `/execute-plan`."* |
 | Max rounds | *"Hit max {max} rounds at {N}%. Review Path to Green; run `/update-plan` + `/pre-flight`, raise max, or `/execute-plan` with override."* |
-| Pause | *"Paused for decisions: {list}. Re-run `/converge-plan` with answers, or `/update-plan` then `/converge-plan`."* |
+| Pause | *"Paused for decisions: {list}. Run `/grill-me` to align and lock them into the plan, then re-run `/converge-plan` (or pass answers inline)."* |
 | Abort | *"Blast radius needs redesign. Run `/create-plan`."* |
 
 ---
@@ -214,10 +214,11 @@ Skip Round-1 audit only when user explicitly requests; still count the following
 | :--- | :--- | :--- |
 | 1 | `/architect-bootstrap` | main agent (+ scan panel) |
 | 2 | `/create-plan` | main agent (+ explorers) |
-| 3 | `/pre-flight` | main agent (+ auditors) — also nested inside converge |
-| 4 | `/update-plan` | main agent — also nested inside converge |
-| 5 | `/converge-plan` | **main agent** (orchestrates 3⇄4 until stop) |
-| 6 | `/execute-plan` | main agent (+ test specifier + executor) |
-| 7 | `/codereview` | main agent (+ review panel) |
-| 8 | `/open-mr` | main agent (+ CI & review monitor) |
-| 9 | `/eop` | main agent (terminal) |
+| 3 | `/grill-me` | main agent (interactive decision-tree interview) |
+| 4 | `/pre-flight` | main agent (+ auditors) — also nested inside converge |
+| 5 | `/update-plan` | main agent — also nested inside converge |
+| 6 | `/converge-plan` | **main agent** (orchestrates 4⇄5 until stop) |
+| 7 | `/execute-plan` | main agent (+ test specifier + executor) |
+| 8 | `/codereview` | main agent (+ review panel) |
+| 9 | `/open-mr` | main agent (+ CI & review monitor) |
+| 10 | `/eop` | main agent (terminal) |

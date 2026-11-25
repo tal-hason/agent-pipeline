@@ -1,7 +1,7 @@
 ---
 name: pre-flight
 description: >-
-  Stage 3 of the agent pipeline. Audits an implementation plan (.plan.md)
+  Stage 4 of the agent pipeline. Audits an implementation plan (.plan.md)
   for confidence, boundary violations, integration risks, and Cynefin alignment before touching
   production code. Soft gate ≥ 90%. Use iteratively to validate and refine plans prior to execution.
 ---
@@ -29,9 +29,9 @@ Spawn **`pre-flight` auditors** in Step 3 (`readonly: true`). You merge their ou
 | 5 | Main agent | Write `*-Pre-Flight-Review_*.md` | File on disk |
 | 6 | Main agent | Present dashboard | User sees confidence + path to green |
 
-**Soft gate for `/execute-plan`:** ≥ 90% and not Stop → ready; otherwise **`/update-plan`** or **`/converge-plan`**, then re-audit, or user override (see [Agent Pipeline Contract](../agent-pipeline/SKILL.md)).
+**Soft gate for `/execute-plan`:** ≥ 90% and not Stop → ready; if Path to Green has `user-decision` / ambiguous trade-offs → **`/grill-me`**; otherwise **`/update-plan`** or **`/converge-plan`**, then re-audit, or user override (see [Agent Pipeline Contract](../agent-pipeline/SKILL.md)).
 
-**Next:** Ready → `/execute-plan` → `/codereview`. Else → `/update-plan` / `/converge-plan`.
+**Next:** Ready → `/execute-plan` → `/codereview`. User decisions needed → `/grill-me`. Else → `/update-plan` / `/converge-plan`.
 
 ---
 
@@ -134,24 +134,26 @@ Required sections:
 
 1. **Paste the full Pre-Flight Dashboard in this conversation.**
 2. State outcome (no pushback on re-runs):
-   - *"Confidence {N}%. Run #{K} for this plan. {Ready → `/execute-plan` | Caution/Stop → Path to Green below; run `/update-plan` or `/converge-plan`}."*
+   - *"Confidence {N}%. Run #{K} for this plan. {Ready → `/execute-plan` | User-decision gaps → `/grill-me` | Caution/Stop → Path to Green below; run `/update-plan` or `/converge-plan`}."*
 
 ---
 
 ## Iteration loop
 
 ```
-/create-plan → /pre-flight → /update-plan → /pre-flight → … → /execute-plan
-                    ▲                │
-                    └────────────────┘
+/create-plan → /grill-me → /pre-flight → /update-plan → /pre-flight → … → /execute-plan
+                                ▲    │            │
+                                │    ▼            │
+                                └─ /grill-me ─────┘  (if user-decision trade-offs block readiness)
 
-Or: /create-plan → /converge-plan → /execute-plan
+Or: /create-plan → /grill-me → /converge-plan → /execute-plan
 ```
 
 - Each `/pre-flight` run is independent — never say "you already ran pre-flight."
 - Compare against prior reports; highlight **delta** in confidence and resolved blockers.
+- Use **`/grill-me`** when Path to Green surfaces unresolved design trade-offs or `user-decision` items.
 - Prefer **`/update-plan`** (single amend) or **`/converge-plan`** (auto loop) over ad-hoc plan edits.
-- **Stop** status is advisory — user may `/update-plan` / `/converge-plan` immediately.
+- **Stop** status is advisory — user may `/grill-me` / `/update-plan` / `/converge-plan` immediately.
 
 ---
 
@@ -171,10 +173,11 @@ Or: /create-plan → /converge-plan → /execute-plan
 | :--- | :--- | :--- |
 | 1 | `/architect-bootstrap` | main agent (+ scan panel) |
 | 2 | `/create-plan` | main agent (+ evidence explorers) |
-| 3 | `/pre-flight` | **main agent** (+ `pre-flight` auditors, iterative) |
-| 4 | `/update-plan` | main agent (+ conditional explorers) |
-| 5 | `/converge-plan` | main agent (orchestrates pre-flight ⇄ update-plan) |
-| 6 | `/execute-plan` | main agent (+ test specifier + executor) |
-| 7 | `/codereview` | main agent (+ `codereview` reviewers) |
-| 8 | `/open-mr` | main agent (+ CI & review monitor) |
-| 9 | `/eop` | main agent (terminal) |
+| 3 | `/grill-me` | main agent (interactive decision-tree interview) |
+| 4 | `/pre-flight` | **main agent** (+ `pre-flight` auditors, iterative) |
+| 5 | `/update-plan` | main agent (+ conditional explorers) |
+| 6 | `/converge-plan` | main agent (orchestrates pre-flight ⇄ update-plan) |
+| 7 | `/execute-plan` | main agent (+ test specifier + executor) |
+| 8 | `/codereview` | main agent (+ `codereview` reviewers) |
+| 9 | `/open-mr` | main agent (+ CI & review monitor) |
+| 10 | `/eop` | main agent (terminal) |

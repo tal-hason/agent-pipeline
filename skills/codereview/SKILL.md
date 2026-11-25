@@ -1,7 +1,7 @@
 ---
 name: codereview
 description: >-
-  Stage 7 of the agent pipeline. Convenes a multi-reviewer specialist panel
+  Stage 8 of the agent pipeline. Convenes a multi-reviewer specialist panel
   (Principal Architect, security lenses, correctness auditors) to review staged or committed
   diffs against architectural rules and safety invariants. Use before pushing or merging code.
 ---
@@ -191,10 +191,11 @@ Path: `.agents/plans/{plan-slug}-Code_Review_YYYY-MM-DD_HHMM.md` (or `.cursor/pl
 | :--- | :--- | :--- |
 | 1 | `/architect-bootstrap` | main agent (+ scan panel) |
 | 2 | `/create-plan` | main agent (+ explorers) |
-| 3 | `/pre-flight` | main agent (+ auditors, iterative) |
-| 4 | `/update-plan` | main agent (+ conditional explorers) |
-| 5 | `/converge-plan` | main agent (orchestrates pre-flight ⇄ update-plan) |
-| 6 | `/execute-plan` | main agent (+ test specifier + executor) |
-| 7 | `/codereview` | **main agent** (+ specialized review panel) |
-| 8 | `/open-mr` | main agent (+ CI & review monitor) |
-| 9 | `/eop` | main agent (terminal) |
+| 3 | `/grill-me` | main agent (interactive decision-tree interview) |
+| 4 | `/pre-flight` | main agent (+ auditors, iterative) |
+| 5 | `/update-plan` | main agent (+ conditional explorers) |
+| 6 | `/converge-plan` | main agent (orchestrates pre-flight ⇄ update-plan) |
+| 7 | `/execute-plan` | main agent (+ test specifier + executor) |
+| 8 | `/codereview` | **main agent** (+ specialized review panel) |
+| 9 | `/open-mr` | main agent (+ CI & review monitor) |
+| 10 | `/eop` | main agent (terminal) |

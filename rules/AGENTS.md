@@ -8,12 +8,13 @@ Workspace-specific memory for the agent pipeline. This file is maintained by `/e
 
 **Canonical contract:** `skills/agent-pipeline/SKILL.md`
 
-**Flow:** `/architect-bootstrap` → `/create-plan` → `/pre-flight` ⇄ `/update-plan` (or `/converge-plan`) → `/execute-plan` → `/codereview` → `/open-mr` → `/eop`
+**Flow:** `/architect-bootstrap` → `/create-plan` → `/grill-me` → `/pre-flight` ⇄ `/update-plan` (or `/converge-plan`) → `/execute-plan` → `/codereview` → `/open-mr` → `/eop`
 
 | Stage | Main agent owns | Workers |
 | :--- | :--- | :--- |
 | `/architect-bootstrap` | Canvas + situational brief | Scan panel A–C (+ conditional D–J); ideation in main agent (Step 2.5) |
 | `/create-plan` | `.plan.md` | 3× explorers (`ce-repo-research-analyst`, `explore`, `ce-correctness-reviewer`) |
+| `/grill-me` | Locked Decisions Ledger + updated `.plan.md` | None (interactive main-agent interview; probes codebase directly) |
 | `/pre-flight` | Pre-Flight Dashboard | 3× `pre-flight` (+ optional `ce-security-lens-reviewer`) |
 | `/update-plan` | Updated `.plan.md` + Amendment Ledger | Conditional 0–2 explorers (`explore`, `ce-correctness-reviewer`) for `evidence-gap` only |
 | `/converge-plan` | Converge outcome + round ledger | Orchestrates nested `/pre-flight` + `/update-plan` |
@@ -28,6 +29,7 @@ Workspace-specific memory for the agent pipeline. This file is maintained by `/e
 | :--- | :--- |
 | `/architect-bootstrap` | Agent or Ask (Ask for fresh ideas) |
 | `/create-plan` | Plan |
+| `/grill-me` | Plan or Agent |
 | `/pre-flight` | Agent or Plan |
 | `/update-plan` | Plan (Agent if explorers needed) |
 | `/converge-plan` | Agent |
