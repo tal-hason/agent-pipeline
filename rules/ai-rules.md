@@ -1,6 +1,7 @@
 ---
-description: "Prompt engineering, AI tool integration, fix verification, and code review standards."
+trigger: always_on
 alwaysApply: true
+description: "Prompt engineering, AI tool integration, fix verification, and code review standards."
 ---
 
 # Prompt Engineering & AI Tool Integration Principle

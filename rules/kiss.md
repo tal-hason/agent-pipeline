@@ -1,6 +1,7 @@
 ---
-description: "KISS principle for problem solving. Start with the simplest possible solution and only add complexity when proven necessary."
+trigger: always_on
 alwaysApply: true
+description: "KISS principle for problem solving. Start with the simplest possible solution and only add complexity when proven necessary."
 ---
 
 # KISS Principle for Problem Solving

@@ -142,7 +142,7 @@ On each check:
 1. Refresh live PR/MR state (never rely on cached state from an earlier turn).
 2. Classify state: `pending` | `changes-requested` | `ci-failed` | `ready-to-merge` | `merged` | `blocked`.
 3. If an automated bot or reviewer pushed commits to the branch, **diff every bot commit** before trusting a subsequent green check.
-4. If CI failed on a clear, in-scope issue caused by this branch: delegate the fix to `execute-plan` (per `rules/orchestrator-mandate.mdc`), verify locally, push, and resume monitoring. If infra/flake: report evidence and pause.
+4. If CI failed on a clear, in-scope issue caused by this branch: delegate the fix to `execute-plan` (per `rules/orchestrator-mandate.md`), verify locally, push, and resume monitoring. If infra/flake: report evidence and pause.
 
 ---
 

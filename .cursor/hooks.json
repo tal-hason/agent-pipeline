@@ -3,7 +3,7 @@
   "hooks": {
     "stop": [
       {
-        "command": "./hooks/codereview-reminder.sh",
+        "command": "${CURSOR_PLUGIN_ROOT:-.}/hooks/codereview-reminder.sh",
         "loop_limit": 1
       }
     ],

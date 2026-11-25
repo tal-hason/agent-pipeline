@@ -1,6 +1,7 @@
 ---
-description: "Mandate: The main agent is an orchestrator. All code mutations and file writes MUST be delegated to worker subagents."
+trigger: always_on
 alwaysApply: true
+description: "Mandate: The main agent is an orchestrator. All code mutations and file writes MUST be delegated to worker subagents."
 ---
 
 # Orchestrator Mandate: Delegation of Execution

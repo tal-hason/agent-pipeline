@@ -173,8 +173,8 @@ Present the review to the user. For each HIGH finding, propose a concrete remedi
 
 ## References
 
-- `platform-strategy.mdc` -- primary rule with interlaced principles
-- `platform-abstraction-quality.mdc` -- deep abstraction discipline
-- `platform-economics.mdc` -- Double Pyramid and economics models
+- `platform-strategy.md` -- primary rule with interlaced principles
+- `platform-abstraction-quality.md` -- deep abstraction discipline
+- `platform-economics.md` -- Double Pyramid and economics models
 - Hohpe, G. -- *Platform Strategy* -- [architectelevator.com](https://architectelevator.com/book/platformstrategy/)
 - Hohpe, G. -- *Platform Engineering is DDD* (DDD Europe 2025) -- [youtube.com](https://www.youtube.com/watch?v=5Ai8UGx7QvQ)

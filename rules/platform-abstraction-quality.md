@@ -1,11 +1,12 @@
 ---
-description: "Platform abstraction quality, illusion traps, cognitive load vs interface size, domain language construction, physical property constraints, and leaky abstractions."
+trigger: model_decision
 alwaysApply: false
+description: "Platform abstraction quality, illusion traps, cognitive load vs interface size, domain language construction, physical property constraints, and leaky abstractions."
 ---
 
 # Platform Abstraction Quality
 
-Companion rule to `platform-strategy.mdc`. Applies when designing, reviewing, or evolving platform abstractions -- APIs, SDKs, CLIs, IaC modules, or self-service portals that layer on top of cloud or infrastructure services.
+Companion rule to `platform-strategy.md`. Applies when designing, reviewing, or evolving platform abstractions -- APIs, SDKs, CLIs, IaC modules, or self-service portals that layer on top of cloud or infrastructure services.
 
 ## 1. Abstraction vs Illusion
 

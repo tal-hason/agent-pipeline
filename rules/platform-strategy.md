@@ -1,11 +1,12 @@
 ---
-description: "Platform strategy, Gregor Hohpe principles, 7 Cs of platform quality, fruit salad composition, platform vs IT service, and developer platform architecture."
+trigger: model_decision
 alwaysApply: false
+description: "Platform strategy, Gregor Hohpe principles, 7 Cs of platform quality, fruit salad composition, platform vs IT service, and developer platform architecture."
 ---
 
 # Platform Strategy: Design Principles
 
-This rule extends the core "Systems Architect" persona to platform design and evaluation. It applies when building, assessing, or evolving in-house developer platforms, API platforms, or data platforms. See `platform-abstraction-quality.mdc` for deep abstraction guidance and `platform-economics.mdc` for the Double Pyramid and economics models.
+This rule extends the core "Systems Architect" persona to platform design and evaluation. It applies when building, assessing, or evolving in-house developer platforms, API platforms, or data platforms. See `platform-abstraction-quality.md` for deep abstraction guidance and `platform-economics.md` for the Double Pyramid and economics models.
 
 ## 1. The 7 "C"s of Platform Quality
 
@@ -53,7 +54,7 @@ Use this table to validate that what you're building actually qualifies as a pla
 
 > "A platform team builds the axle that makes the outer loop spin faster. But it's not part of that loop to avoid becoming a bottleneck." [1]
 
-**The Double Pyramid** [2]: The classic IT pyramid (wide base, narrow top) optimizes for **cost/reuse**. A platform inverts the top half: scale economics at the base, **speed/innovation economics** at the top. The platform team is the bearing, the grease, the axle -- it makes the developer inner/outer loop spin faster, but it is **not in the loop**. If the platform team is in the deployment cycle (tickets, approvals, "let me show you how"), you have the old model with a new label. See `platform-economics.mdc` for the full model.
+**The Double Pyramid** [2]: The classic IT pyramid (wide base, narrow top) optimizes for **cost/reuse**. A platform inverts the top half: scale economics at the base, **speed/innovation economics** at the top. The platform team is the bearing, the grease, the axle -- it makes the developer inner/outer loop spin faster, but it is **not in the loop**. If the platform team is in the deployment cycle (tickets, approvals, "let me show you how"), you have the old model with a new label. See `platform-economics.md` for the full model.
 
 ## 4. Railways, Not Guardrails
 
@@ -81,7 +82,7 @@ Apply the same principle to platform controls:
 * **Physical Properties Leak** [2] -- abstractions cannot hide latency, cost, quotas, availability, TTL, retry behavior, or duplicate handling. Cloud-neutral abstractions that map a "queue" to SQS, Pub/Sub, and Azure Event Hubs are dangerous because these services have fundamentally different physical characteristics. Joel Spolsky's Law of Leaky Abstractions: most leaks are physical properties.
 * **Failure leaks through every layer** [1][2] -- every abstraction must provide a "stack trace" equivalent so users can debug what is beneath. Like compilers have line number tables to trace bytecode back to source, platform abstractions need **traceability mechanisms**. If your abstraction creates one logical resource but provisions three cloud resources, you need cost attribution, debugging, and incident traceability back through the layers.
 
-See `platform-abstraction-quality.mdc` for the full abstraction discipline.
+See `platform-abstraction-quality.md` for the full abstraction discipline.
 
 ## 6. Architect Review Checklist
 
@@ -93,7 +94,7 @@ When reviewing platform code or proposals, evaluate:
 4. **Innovation Test** [2]: Can users build things the platform team did not anticipate? Or does the platform restrict the playing field?
 5. **Abstraction vs Illusion**: Are essential distributed system concerns (ordering, retry, backpressure) exposed or hidden? Does the interface use a **new domain vocabulary**, or just passthrough naming from the layer beneath?
 6. **Cognitive Load Honesty** [2]: Does a narrow interface genuinely reduce cognitive load, or does it hide complexity behind overloaded parameters and 30 pages of documentation?
-7. **Cimarron Test** [2]: Is the top of the pyramid being shrunk? Resist "just configure" / "no code" urges that eliminate the innovation layer. See `platform-economics.mdc` Section 3.
+7. **Cimarron Test** [2]: Is the top of the pyramid being shrunk? Resist "just configure" / "no code" urges that eliminate the innovation layer. See `platform-economics.md` Section 3.
 8. **Railway or Guardrail** [2]: Are controls self-centering (feedback, transparency) or blocking (gates, tickets, approvals)?
 9. **Physical Property Leak**: Are latency, cost, quotas, and failure modes surfaced or hidden by the abstraction?
 10. **Stack Trace Equivalent** [2]: Can a user trace a platform-level error back through abstraction layers to the underlying infrastructure?

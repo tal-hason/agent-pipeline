@@ -1,6 +1,7 @@
 ---
-description: "Cynefin sense-making framework: classify problems into Clear, Complicated, Complex, Chaotic, or Disorder to govern decision making, probes, and architectural practice."
+trigger: model_decision
 alwaysApply: false
+description: "Cynefin sense-making framework: classify problems into Clear, Complicated, Complex, Chaotic, or Disorder to govern decision making, probes, and architectural practice."
 ---
 
 # Mandate: Cynefin Sense-Making

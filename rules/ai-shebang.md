@@ -1,7 +1,8 @@
 ---
-description: Enforce AI Shebang headers in all code files.
-globs: "**/*.{ts,js,py,java,go,rb,cs,php}"
+trigger: glob
 alwaysApply: false
+description: Enforce AI Shebang headers in all code files.
+globs: "**/*.ts, **/*.js, **/*.py, **/*.java, **/*.go, **/*.rb, **/*.cs, **/*.php"
 ---
 
 # AI Shebang Rule

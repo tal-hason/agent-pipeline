@@ -1,6 +1,7 @@
 ---
-description: "Microservices architecture, distributed control systems, event-driven messaging, Hexagonal driving/driven ports, idempotency, saga, and circuit breaker patterns."
+trigger: model_decision
 alwaysApply: false
+description: "Microservices architecture, distributed control systems, event-driven messaging, Hexagonal driving/driven ports, idempotency, saga, and circuit breaker patterns."
 ---
 
 # Microservices: Distributed Control Systems

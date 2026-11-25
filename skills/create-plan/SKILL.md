@@ -175,7 +175,7 @@ Numbered steps. Each must be:
 - **Cynefin-tagged** — Clear / Complicated / Complex
 - **Verification-defined** — build, test, or lint command that proves done
 
-**Complex steps** must include an inline probe template (`rules/plan-probes.mdc`):
+**Complex steps** must include an inline probe template (`rules/plan-probes.md`):
 - Hypothesis, Method (safe-to-fail), Sensing, Acceptance criteria
 - Mark: `**Cynefin: Complex -- probe required**`
 

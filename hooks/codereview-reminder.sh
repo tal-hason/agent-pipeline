@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ~/.cursor/hooks/codereview-reminder.sh
+# hooks/codereview-reminder.sh
 # stop hook: remind agent to run /codereview if ANY files were modified.
 set -euo pipefail
 

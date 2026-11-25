@@ -36,7 +36,7 @@ Workspace-specific memory for the agent pipeline. This file is maintained by `/e
 | `/open-mr` | Agent |
 | `/eop` | Agent |
 
-**Rules:** Read `AGENTS.md` and prior artifacts on disk first; pass Context Packages by Reference in worker prompts; telegraphic (caveman) worker output; delegate all code mutations to worker subagents (`rules/orchestrator-mandate.mdc`); thinking-tier models for audit/review workers.
+**Rules:** Read `AGENTS.md` and prior artifacts on disk first; pass Context Packages by Reference in worker prompts; telegraphic (caveman) worker output; delegate all code mutations to worker subagents (`rules/orchestrator-mandate.md`); thinking-tier models for audit/review workers.
 
 **References (not subagents):** `references/architect-brief-canvas.md`
 

@@ -1,6 +1,7 @@
 ---
-description: "Codebase conventions, implementation principles, context-gathering workflow, and commit practices."
+trigger: always_on
 alwaysApply: true
+description: "Codebase conventions, implementation principles, context-gathering workflow, and commit practices."
 ---
 
 # Codebase & Workflow Conventions

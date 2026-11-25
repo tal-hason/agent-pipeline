@@ -1,7 +1,8 @@
 ---
+trigger: glob
+alwaysApply: false
 description: Mark Complex/probe steps in plans so /execute-plan can detect and spawn probe-runner subagents
 globs: "**/.cursor/plans/*.plan.md"
-alwaysApply: false
 ---
 
 # Probe Detection in Plans

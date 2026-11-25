@@ -1,6 +1,7 @@
 ---
-description: "Safety rules before refactoring or splitting a codebase or file: pre-refactor logic documentation."
+trigger: model_decision
 alwaysApply: false
+description: "Safety rules before refactoring or splitting a codebase or file: pre-refactor logic documentation."
 ---
 
 # Refactoring Safety Rule

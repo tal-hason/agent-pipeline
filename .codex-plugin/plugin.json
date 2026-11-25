@@ -1,0 +1,42 @@
+{
+  "name": "agent-pipeline",
+  "version": "1.0.0",
+  "description": "Structured 9-stage engineering pipeline (bootstrap, plan, pre-flight, update, converge, Red-First ATDD execution, multi-reviewer code review, PR/MR monitor, and continual learning) with 15 skills, 69 subagents, and architecture rules.",
+  "author": {
+    "name": "Tal Hason",
+    "url": "https://github.com/tal-hason"
+  },
+  "homepage": "https://github.com/tal-hason/agent-pipeline",
+  "repository": "https://github.com/tal-hason/agent-pipeline",
+  "license": "MIT",
+  "keywords": [
+    "agent-pipeline",
+    "architecture",
+    "atdd",
+    "tdd",
+    "code-review",
+    "cynefin",
+    "hexagonal-architecture",
+    "workflows"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Agent Pipeline",
+    "shortDescription": "Structured 9-stage AI engineering pipeline with 15 skills, 69 subagents, and architecture rules",
+    "longDescription": "Turns a vague idea into reviewed, shipped, and documented code through nine structured stages: architect-bootstrap, create-plan, pre-flight, update-plan, converge-plan, Red-First ATDD execute-plan, multi-reviewer codereview, open-mr, and eop continual learning.",
+    "developerName": "Tal Hason",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/tal-hason/agent-pipeline",
+    "defaultPrompt": [
+      "Run /architect-bootstrap on this repository to map its architecture, boundaries, and risks",
+      "Run /create-plan to design an evidence-backed implementation plan with 4-layer ATDD specs",
+      "Run /codereview on my current branch diff with the specialist reviewer panel"
+    ],
+    "logo": "./assets/logo.svg"
+  }
+}

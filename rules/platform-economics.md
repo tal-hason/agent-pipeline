@@ -1,11 +1,12 @@
 ---
-description: "Platform economics, Double Pyramid model, scale below speed above, economies of scale vs speed, Cadillac Cimarron Effect, and platform cost modeling."
+trigger: model_decision
 alwaysApply: false
+description: "Platform economics, Double Pyramid model, scale below speed above, economies of scale vs speed, Cadillac Cimarron Effect, and platform cost modeling."
 ---
 
 # Platform Economics: Scale Below, Speed Above
 
-Companion rule to `platform-strategy.mdc`. Applies when making strategic decisions about platform scope, investment, team structure, or roadmap -- anywhere the tension between standardization and innovation surfaces.
+Companion rule to `platform-strategy.md`. Applies when making strategic decisions about platform scope, investment, team structure, or roadmap -- anywhere the tension between standardization and innovation surfaces.
 
 ## 1. The Double Pyramid
 

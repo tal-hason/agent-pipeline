@@ -1,6 +1,6 @@
 # Agent Pipeline
 
-A complete, modular agent pipeline for **Cursor**, **Antigravity (AGY) / Gemini**, and **Claude Code** that turns a vague idea into reviewed, shipped, and documented code through nine structured stages.
+A complete, multi-harness plugin for **Antigravity (`agy`)**, **Cursor**, **Claude Code**, and **Codex** that turns a vague idea into reviewed, shipped, and documented code through nine structured stages.
 
 ```
 /architect-bootstrap → /create-plan → /pre-flight ⇄ /update-plan → /execute-plan → /codereview → /open-mr → /eop
@@ -8,13 +8,25 @@ A complete, modular agent pipeline for **Cursor**, **Antigravity (AGY) / Gemini*
                                            └─ /converge-plan ─┘
 ```
 
-## What's in this repo
+## What's in this plugin
 
-Copy these files into your user-level agent config (`~/.cursor/`, `~/.gemini/config/`, or `~/.claude/`) or into a project-level `.cursor/` / `.agents/` directory.
+One repository root packaged as a multi-harness plugin bundle (`agent-pipeline`):
 
 ```
-Agent Pipeline Package
-├── AGENTS.md                              # Pipeline contract & cross-session learnings
+agent-pipeline/
+├── plugin.json                            # Antigravity root plugin manifest
+├── .cursor-plugin/
+│   ├── plugin.json                        # Cursor plugin manifest
+│   └── marketplace.json                   # Cursor marketplace catalog entry
+├── .claude-plugin/
+│   ├── plugin.json                        # Claude Code plugin manifest
+│   └── marketplace.json                   # Claude Code marketplace catalog entry
+├── .codex-plugin/
+│   └── plugin.json                        # Codex plugin manifest
+├── .cursor/
+│   └── hooks.json                         # Cursor lifecycle hooks (stop + afterFileEdit)
+├── assets/
+│   └── logo.svg                           # Plugin icon
 ├── skills/                                # 15 modular skills (progressive disclosure)
 │   ├── agent-pipeline/SKILL.md            # Canonical 9-stage pipeline orchestrator
 │   ├── architect-bootstrap/SKILL.md       # Stage 1: workspace scan + canvas brief
@@ -42,64 +54,73 @@ Agent Pipeline Package
 │   ├── ce-*.md                            # 51 Compound Engineering specialists & scouts
 │   ├── *-review.md / ci-watcher.md / ...  # 9 compatibility, CI, learning, & code-review agents
 │   └── explore.md / general-purpose.md    # 2 pipeline built-in aliases
+├── rules/                                 # 14 rules (AGENTS.md + 13 modular rules)
+│   ├── AGENTS.md                          # Pipeline contract & cross-session learnings
+│   ├── persona.md                         # Systems Architect persona
+│   ├── orchestrator-mandate.md            # Main-agent delegation of code mutations
+│   ├── cynefin.md                         # Cynefin sense-making framework
+│   ├── kiss.md                            # KISS problem-solving principle
+│   ├── ai-shebang.md                      # @ai-rules header enforcement
+│   ├── ai-rules.md                        # Prompt engineering standards
+│   ├── codebase-workflow.md               # Code conventions + context gathering
+│   ├── refactor.md                        # Pre-refactor documentation
+│   ├── microservices.md                   # Distributed systems patterns
+│   ├── platform-strategy.md               # Platform design principles (7 C's)
+│   ├── platform-economics.md              # Double Pyramid economics model
+│   ├── platform-abstraction-quality.md    # Abstraction vs illusion discipline
+│   └── plan-probes.md                     # Complex step probe templates
+├── hooks/
+│   └── codereview-reminder.sh             # Remind to run /codereview when files changed
 ├── references/
 │   └── architect-brief-canvas.md          # Canvas structure for /architect-bootstrap
 ├── docs/
 │   └── pipeline-howto.md                  # Team onboarding & usage guide
-├── rules/                                 # 13 rules (.mdc)
-│   ├── persona.mdc                        # Systems Architect persona
-│   ├── orchestrator-mandate.mdc           # Main-agent delegation of code mutations
-│   ├── cynefin.mdc                        # Cynefin sense-making framework
-│   ├── kiss.mdc                           # KISS problem-solving principle
-│   ├── ai-shebang.mdc                     # @ai-rules header enforcement
-│   ├── ai-rules.mdc                       # Prompt engineering standards
-│   ├── codebase-workflow.mdc              # Code conventions + context gathering
-│   ├── refactor.mdc                       # Pre-refactor documentation
-│   ├── microservices.mdc                  # Distributed systems patterns
-│   ├── platform-strategy.mdc             # Platform design principles (7 C's)
-│   ├── platform-economics.mdc             # Double Pyramid economics model
-│   ├── platform-abstraction-quality.mdc   # Abstraction vs illusion discipline
-│   └── plan-probes.mdc                    # Complex step probe templates
-├── hooks.json                             # Session hooks configuration
-└── hooks/
-    └── codereview-reminder.sh             # Remind to run /codereview when files changed
+└── LICENSE                                # MIT License
 ```
 
 ## Installation
 
-Clone the repository and copy the package into your preferred agent environment:
+### Antigravity (`agy`)
+
+Install directly from GitHub:
 
 ```bash
-git clone https://github.com/tal-hason/cursor-stuff.git
+agy plugin install https://github.com/tal-hason/agent-pipeline
 ```
 
-### Cursor (user-level)
+Validate or manage locally:
 
 ```bash
-cp -r cursor-stuff/{AGENTS.md,agents,docs,hooks,hooks.json,references,rules,skills} ~/.cursor/
+agy plugin list
+agy plugin validate https://github.com/tal-hason/agent-pipeline --strict
 ```
 
-### Antigravity / Gemini (user-level)
+### Cursor
+
+Add `https://github.com/tal-hason/agent-pipeline` in **Cursor Settings → Plugins / Marketplaces**, or clone directly into your local Cursor plugins folder:
 
 ```bash
-cp -r cursor-stuff/{AGENTS.md,agents,docs,references,rules,skills} ~/.gemini/config/
+git clone https://github.com/tal-hason/agent-pipeline.git ~/.cursor/plugins/local/agent-pipeline
 ```
 
-### Project-level
+### Claude Code
 
-Copy into a repository's `.cursor/` or `.agents/` folder for repo-scoped use:
+Register the marketplace and install the plugin:
+
+```text
+/plugin marketplace add tal-hason/agent-pipeline
+/plugin install agent-pipeline@agent-pipeline
+```
+
+### Codex / Manual Project-Level
+
+Clone the repository and copy `skills/`, `agents/`, and `rules/` into a project's `.agents/` or `.cursor/` directory:
 
 ```bash
-mkdir -p /path/to/project/.cursor
-cp -r cursor-stuff/{AGENTS.md,agents,docs,hooks,hooks.json,references,rules,skills} /path/to/project/.cursor/
+git clone https://github.com/tal-hason/agent-pipeline.git
+mkdir -p /path/to/project/.agents
+cp -r agent-pipeline/{skills,agents,rules} /path/to/project/.agents/
 ```
-
-### Cherry-pick
-
-At minimum, the pipeline needs:
-- `skills/agent-pipeline/SKILL.md` + the 9 workflow skills in `skills/`
-- `agents/` (worker definitions)
-- `rules/cynefin.mdc`, `rules/persona.mdc`, and `rules/orchestrator-mandate.mdc`
 
 ## How the pipeline works
 
@@ -147,4 +168,4 @@ This pipeline is built on:
 
 ## License
 
-MIT
+[MIT](LICENSE)

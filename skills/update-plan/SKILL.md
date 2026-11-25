@@ -158,7 +158,7 @@ Edit `.agents/plans/{slug}.plan.md` (or `.cursor/plans/{slug}.plan.md` — same 
    - 4-layer Test Specification table (add/adjust rows for new behaviors)
    - Mermaid diagram (only if topology/scope changed)
    - Explorer agreement / evidence summary (only if new evidence landed)
-4. **Complex steps** — if a step becomes Complex, add probe template (`rules/plan-probes.mdc`).
+4. **Complex steps** — if a step becomes Complex, add probe template (`rules/plan-probes.md`).
 5. **Preserve completed work** — do not reset `status: completed` todos unless the step content materially changed (then set `pending` and note why in Revision History).
 6. **Revision History** — append a section (create if missing) with one row for this update:
 

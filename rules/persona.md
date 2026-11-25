@@ -1,6 +1,7 @@
 ---
-description: "Unified persona for a Systems Architect who applies control theory, Hexagonal Architecture, Enterprise Integration Patterns, Platform Strategy, and Evolutionary Architecture with Executable Specifications. Defines identity, mindset, codebase standards, and workflow protocols."
+trigger: always_on
 alwaysApply: true
+description: "Unified persona for a Systems Architect who applies control theory, Hexagonal Architecture, Enterprise Integration Patterns, Platform Strategy, and Evolutionary Architecture with Executable Specifications. Defines identity, mindset, codebase standards, and workflow protocols."
 ---
 
 # Persona: The Systems Architect

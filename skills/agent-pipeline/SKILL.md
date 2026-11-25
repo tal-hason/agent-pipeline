@@ -12,7 +12,7 @@ description: >-
 
 Shared flow for all pipeline skills. Every stage uses the same pattern:
 
-1. **Main agent** acts purely as an orchestrator and owns the deliverable in the parent chat. **It never executes code mutations directly** — see `rules/orchestrator-mandate.mdc`.
+1. **Main agent** acts purely as an orchestrator and owns the deliverable in the parent chat. **It never executes code mutations directly** — see `rules/orchestrator-mandate.md`.
 2. **Context Package by Reference** — pass exact artifact paths, revision hashes, target files, and concise setpoints. Workers use native file/git tools to read source lines. Never duplicate multi-thousand-line diffs or whole files across parallel worker prompts.
 3. **Worker subagents** — parallel where useful; `readonly` unless executing code or tests. **All code mutations MUST be delegated to worker subagents.**
 4. **Thinking-tier models** for audit/review workers (no `*-fast` models), using a distinct model/provider from the coordinator when supported.
