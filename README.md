@@ -2,10 +2,57 @@
 
 A complete, multi-harness plugin for **Antigravity (`agy`)**, **Cursor**, **Claude Code**, and **Codex** that turns a vague idea into reviewed, shipped, and documented code through nine structured stages.
 
-```
-/architect-bootstrap → /create-plan → /pre-flight ⇄ /update-plan → /execute-plan → /codereview → /open-mr → /eop
-     (WHERE+WHAT)         (HOW)            ▲             │               (build)        (review)     (ship)    (close)
-                                           └─ /converge-plan ─┘
+```mermaid
+flowchart TD
+    subgraph P1 ["Phase 1 · Sense & Design (WHERE · WHAT · HOW)"]
+        S1(["1 · /architect-bootstrap — Scan, Ideate & Canvas Brief"])
+        S2["2 · /create-plan — 3x Explorers, Plan & 4-Layer ATDD Spec"]
+    end
+
+    subgraph P2 ["Phase 2 · Readiness & Convergence (Setpoint Audit)"]
+        S3{"3 · /pre-flight — 3x Auditors (≥ 90% Gate)"}
+        S4["4 · /update-plan — Amendment Ledger & Coherence Gate"]
+        S5[["5 · /converge-plan — Auto Loop (Max 3 Rounds, Stall Guard)"]]
+    end
+
+    subgraph P3 ["Phase 3 · Closed-Loop ATDD Execution & Review"]
+        S6["6 · /execute-plan — Red Harness → Contract Lock → Green SUT"]
+        S7{"7 · /codereview — R1–R6 Security & Architecture Panel"}
+    end
+
+    subgraph P4 ["Phase 4 · Ship & Compound Knowledge"]
+        S8["8 · /open-mr — PR/MR Creation, CI & Review Monitor"]
+        S9(["9 · /eop — Docs, AGENTS.md Learnings & Session Digest"])
+    end
+
+    S1 -->|"Canvas + Scope"| S2
+    S2 -->|"Manual Audit"| S3
+    S2 -.->|"Auto Converge"| S5
+    S3 -->|"< 90% · Path to Green"| S4
+    S4 -->|"Re-score Plan"| S3
+    S5 <-->|"Orchestrates 3 ⇄ 4"| S3
+    S3 -->|"Ready (≥ 90%) or Override"| S6
+    S5 -->|"Converged (≥ 90%)"| S6
+    S6 -->|"Sealed Tests Green"| S7
+    S7 -.->|"Fix Findings"| S6
+    S7 -.->|"Plan-Level Gap"| S4
+    S7 -->|"Clean Verdict"| S8
+    S8 -->|"Safe Gates Merged"| S9
+
+    classDef entryExit fill:#0f172a,stroke:#38bdf8,stroke-width:2.5px,color:#f8fafc
+    classDef action fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#f8fafc
+    classDef gate fill:#451a03,stroke:#f59e0b,stroke-width:2.5px,color:#fef3c7
+    classDef loopNode fill:#064e3b,stroke:#34d399,stroke-width:2.5px,color:#ecfdf5
+
+    class S1,S9 entryExit
+    class S2,S4,S6,S8 action
+    class S3,S7 gate
+    class S5 loopNode
+
+    style P1 fill:transparent,stroke:#64748b,stroke-width:1.5px,stroke-dasharray: 5 5
+    style P2 fill:transparent,stroke:#64748b,stroke-width:1.5px,stroke-dasharray: 5 5
+    style P3 fill:transparent,stroke:#64748b,stroke-width:1.5px,stroke-dasharray: 5 5
+    style P4 fill:transparent,stroke:#64748b,stroke-width:1.5px,stroke-dasharray: 5 5
 ```
 
 ## What's in this plugin
